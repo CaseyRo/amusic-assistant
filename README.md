@@ -1,4 +1,53 @@
-# Music Assistant frontend (Vue PWA)
+# amusic-assistant
+
+An Apple Music–style skin for the [Music Assistant](https://music-assistant.io) web frontend.
+
+Music Assistant has become great at *what* it plays. This fork is about *how it feels* while it plays:
+
+- **Fullscreen now playing:** blurred-artwork backdrop, big artwork, synced lyrics beside it. Designed separately for phone, tablet and desktop instead of one layout stretched across all three.
+- **Glass player bar:** a floating, translucent pane over the content instead of the full-width bottom strip.
+- **Always-on-top mini player:** a small window that stays in front of everything else (Document Picture-in-Picture in Chromium browsers).
+
+> **Status:** early work in progress. Expect rough edges.
+
+## Requirements
+
+- A Music Assistant **server 2.11 or newer**. This fork tracks upstream `main`, which needs server API schema 86+.
+- Node 24 and pnpm (via corepack).
+
+## Run it
+
+```sh
+pnpm install
+pnpm dev
+```
+
+Open http://localhost:3000 and enter your Music Assistant server URL when asked.
+
+## Relationship to upstream
+
+This is a fork of [music-assistant/frontend](https://github.com/music-assistant/frontend) (Apache 2.0). `main` stays mergeable with upstream:
+
+```sh
+git remote add upstream https://github.com/music-assistant/frontend.git
+git fetch upstream && git merge upstream/main
+```
+
+Changes are planned as OpenSpec changes in [`openspec/`](openspec/). Code that is specific to this fork is marked with `amusic:` comments so it is easy to find during upstream merges.
+
+All credit for Music Assistant goes to its authors and contributors. This fork only reworks the player experience. It is not affiliated with Apple or the Open Home Foundation.
+
+## Support this project
+
+If this is useful to you, consider buying me a coffee:
+
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/caseyberlin)
+
+---
+
+## Upstream development notes
+
+The notes below come from the upstream frontend README.
 
 The Music Assistant frontend/panel is developed in Vue, development instructions below.
 
