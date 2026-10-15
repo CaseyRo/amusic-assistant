@@ -19,7 +19,7 @@
 
 - [ ] 3.1 Build `GlassSurface.vue` (fill, blur, rim, highlight, light and dark variants, plus the `@supports` opaque fallback) and verify both paths by toggling backdrop-filter off in DevTools
 - [ ] 3.2 Build `useArtworkBackdrop()` (server palette → blurred colour fields, crossfade on track change, lightness-adaptive scrim) and verify AA contrast with a near-white cover from the NAS library
-- [ ] 3.3 Build the generated cover (a deterministic gradient from album id or track uri, with the title as type) and verify with a Vitest test that the same id gives the same palette and different ids differ
+- [x] 3.3 Build the generated cover (a deterministic gradient from album id or track uri, with the title as type) and verify with a Vitest test that the same id gives the same palette and different ids differ
 
 ## 4. Quality badge
 
