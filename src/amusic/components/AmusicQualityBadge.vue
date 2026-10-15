@@ -89,6 +89,7 @@ const summary = computed(() =>
 
 <style scoped>
 .am-quality {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -101,6 +102,13 @@ const summary = computed(() =>
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
+}
+
+/* the pill stays small; the hit area grows to the touch target */
+.am-quality::before {
+  content: "";
+  position: absolute;
+  inset: calc((22px - var(--am-target)) / 2) 0;
 }
 
 .am-quality__dot {

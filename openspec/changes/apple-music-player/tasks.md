@@ -17,25 +17,25 @@
 
 ## 3. Glass and backdrop primitives
 
-- [ ] 3.1 Build `GlassSurface.vue` (fill, blur, rim, highlight, light and dark variants, plus the `@supports` opaque fallback) and verify both paths by toggling backdrop-filter off in DevTools
-- [ ] 3.2 Build `useArtworkBackdrop()` (server palette → blurred colour fields, crossfade on track change, lightness-adaptive scrim) and verify AA contrast with a near-white cover from the NAS library
+- [x] 3.1 Build `GlassSurface.vue` (fill, blur, rim, highlight, light and dark variants, plus the `@supports` opaque fallback) and verify both paths by toggling backdrop-filter off in DevTools
+- [x] 3.2 Build `useArtworkBackdrop()` (server palette → blurred colour fields, crossfade on track change, lightness-adaptive scrim) and verify AA contrast with a near-white cover from the NAS library
 - [x] 3.3 Build the generated cover (a deterministic gradient from album id or track uri, with the title as type) and verify with a Vitest test that the same id gives the same palette and different ids differ
 
 ## 4. Quality badge
 
-- [ ] 4.1 Build `AmusicQualityBadge` on `useStreamQuality` and `useActiveAudioPath` (tier label, tier colour, format summary, range for groups, hidden when unknown, tap opens `AudioProcessingDetails`). Verify with a Vitest test of the format-summary helper (`FLAC 44.1`, `MP3 192`, unknown → empty) and by tapping it on the playing NAS track
+- [x] 4.1 Build `AmusicQualityBadge` on `useStreamQuality` and `useActiveAudioPath` (tier label, tier colour, format summary, range for groups, hidden when unknown, tap opens `AudioProcessingDetails`). Verify with a Vitest test of the format-summary helper (`FLAC 44.1`, `MP3 192`, unknown → empty) and by tapping it on the playing NAS track
 
 ## 5. Fullscreen now playing
 
-- [ ] 5.1 Build the `AmusicFullscreen` stage shell (backdrop, `data-layout`, bounded desktop stage, swipe to close in phone portrait), mount it from `PlayerTrackDetails.vue` behind an `amusic:` switch, and verify it opens and closes from the bar on all five layouts
-- [ ] 5.2 Build the artwork, title row, scrubber with the centred quality badge, transport and volume from upstream sub-components, and verify against the Paper phone and desktop artboards at 390×844 and 1440×900
-- [ ] 5.3 Implement the phone portrait and tablet portrait stacks with a glass dock (lyrics / room / queue) and the artwork-to-header collapse when a panel opens. Verify at 390×844 and 820×1180 that the transport stays visible with lyrics and with the queue open
-- [ ] 5.4 Implement the two-column tablet landscape and desktop layout with the glass Lyrics / Up next toggle. Verify at 1180×820 that play/pause is fully visible, and at 3440×1440 that the stage stays bounded
-- [ ] 5.5 Implement phone landscape (artwork left, controls right, panels replace the artwork, no scroll) and verify at 844×390
+- [x] 5.1 Build the `AmusicFullscreen` stage shell (backdrop, `data-layout`, bounded desktop stage, swipe to close in phone portrait), mount it from `PlayerTrackDetails.vue` behind an `amusic:` switch, and verify it opens and closes from the bar on all five layouts
+- [x] 5.2 Build the artwork, title row, scrubber with the centred quality badge, transport and volume from upstream sub-components, and verify against the Paper phone and desktop artboards at 390×844 and 1440×900
+- [x] 5.3 Implement the phone portrait and tablet portrait stacks with a glass dock (lyrics / room / queue) and the artwork-to-header collapse when a panel opens. Verify at 390×844 and 820×1180 that the transport stays visible with lyrics and with the queue open
+- [x] 5.4 Implement the two-column tablet landscape and desktop layout with the glass Lyrics / Up next toggle. Verify at 1180×820 that play/pause is fully visible, and at 3440×1440 that the stage stays bounded
+- [x] 5.5 Implement phone landscape (artwork left, controls right, panels replace the artwork, no scroll) and verify at 844×390
 - [ ] 5.6 Restyle the lyrics presentation (current line full contrast, distance-based dim and blur, unsynced fallback) by wrapping `LyricsViewer`, and verify with a track that has LRC lyrics and with one that has plain lyrics
-- [ ] 5.7 Implement the no-lyrics and no-artwork states and verify with the NAS track "Like A Rolling Stone" (no cover, no lyrics): a generated cover, Lyrics marked unavailable, and the queue shown on desktop
+- [x] 5.7 Implement the no-lyrics and no-artwork states and verify with the NAS track "Like A Rolling Stone" (no cover, no lyrics): a generated cover, Lyrics marked unavailable, and the queue shown on desktop
 - [ ] 5.8 Wire the room control to open the player picker and verify that switching rooms from fullscreen changes the active player
-- [ ] 5.9 Verify rotation and resizing: resize from 1440 to 700 to 390 px wide during playback and confirm the layout switches without a reload and audio does not stop
+- [x] 5.9 Verify rotation and resizing: resize from 1440 to 700 to 390 px wide during playback and confirm the layout switches without a reload and audio does not stop
 
 ## 6. Floating glass bar
 

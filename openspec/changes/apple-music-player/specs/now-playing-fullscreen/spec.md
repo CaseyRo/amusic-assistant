@@ -109,6 +109,10 @@ When synced lyrics are available, the current line SHALL be shown in full contra
 ### Requirement: No-lyrics state
 When a track has no lyrics, the lyrics control SHALL show as unavailable, and opening the lyrics panel SHALL show a short message instead of an empty area. On wide layouts the right column SHALL default to the queue.
 
+#### Scenario: Lyrics lookup never answers
+- **WHEN** the lyrics lookup has not answered after 12 seconds
+- **THEN** the track is treated as having no lyrics, instead of showing a loading state indefinitely
+
 #### Scenario: Track without lyrics on desktop
 - **WHEN** fullscreen opens on desktop for a track with no lyrics
 - **THEN** the right column shows the queue and the Lyrics option in the toggle is marked unavailable
