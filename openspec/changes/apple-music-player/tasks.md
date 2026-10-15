@@ -12,8 +12,8 @@
 
 ## 2. Layout classification
 
-- [ ] 2.1 Implement `useAmusicLayout()` (ResizeObserver on a given element → one of the five layouts, using the spec's ordered rules) and verify that a Vitest table test covers every dimension in the `adaptive-player-layout` scenarios
-- [ ] 2.2 Add coarse/fine pointer styles (44px minimum touch targets, hover only for fine pointers) as glass tokens in `src/amusic/styles/` and verify in DevTools touch emulation that controls are at least 44×44px at 1180×820
+- [x] 2.1 Implement `useAmusicLayout()` (ResizeObserver on a given element → one of the five layouts, using the spec's ordered rules) and verify that a Vitest table test covers every dimension in the `adaptive-player-layout` scenarios
+- [x] 2.2 Add coarse/fine pointer styles (44px minimum touch targets, hover only for fine pointers) as glass tokens in `src/amusic/styles/` and verify in DevTools touch emulation that controls are at least 44×44px at 1180×820
 
 ## 3. Glass and backdrop primitives
 

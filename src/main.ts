@@ -34,6 +34,8 @@ if (!Object.hasOwn) {
 // Global styles
 import "@/styles/global.css";
 import "@/styles/style.css";
+// amusic: fork-owned design tokens and theme
+import "@/amusic/styles/tokens.css";
 
 // Components
 import App from "./App.vue";

@@ -1,0 +1,46 @@
+/* amusic design tokens. Loaded once from main.ts, after upstream's styles. */
+:root {
+  /* glass surfaces (spec: now-playing-fullscreen, floating-player-bar) */
+  --am-glass-fill: rgb(255 255 255 / 0.58);
+  --am-glass-fill-strong: rgb(255 255 255 / 0.72);
+  --am-glass-rim: rgb(255 255 255 / 0.8);
+  --am-glass-highlight: rgb(255 255 255 / 0.95);
+  --am-glass-hairline: rgb(0 0 0 / 0.08);
+  --am-glass-shadow: 0 16px 40px rgb(20 20 30 / 0.18);
+  --am-glass-blur: blur(28px) saturate(190%);
+  /* opaque stand-in where backdrop-filter is unsupported */
+  --am-glass-fallback: rgb(246 246 247 / 0.97);
+
+  /* glass on artwork backdrops (fullscreen), always light-on-dark */
+  --am-glass-dark-fill: rgb(255 255 255 / 0.14);
+  --am-glass-dark-rim: rgb(255 255 255 / 0.4);
+  --am-glass-dark-highlight: rgb(255 255 255 / 0.55);
+  --am-glass-dark-fallback: rgb(30 34 40 / 0.92);
+
+  /* floating bar geometry */
+  --am-bar-gap: 12px;
+  --am-bar-max-width: 1000px;
+  --am-bar-height: 58px;
+  --am-bar-radius: 18px;
+
+  /* interactive targets: fine pointers get compact controls */
+  --am-target: 32px;
+}
+
+/* MA puts the resolved theme on <html> as .light / .dark */
+:root.dark {
+  --am-glass-fill: rgb(40 40 46 / 0.58);
+  --am-glass-fill-strong: rgb(40 40 46 / 0.72);
+  --am-glass-rim: rgb(255 255 255 / 0.14);
+  --am-glass-highlight: rgb(255 255 255 / 0.18);
+  --am-glass-hairline: rgb(255 255 255 / 0.06);
+  --am-glass-shadow: 0 16px 40px rgb(0 0 0 / 0.45);
+  --am-glass-fallback: rgb(32 32 36 / 0.97);
+}
+
+/* spec: adaptive-player-layout, "Touch affordances follow the input type" */
+@media (pointer: coarse) {
+  :root {
+    --am-target: 44px;
+  }
+}
