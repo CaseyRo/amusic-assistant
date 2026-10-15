@@ -192,6 +192,7 @@ import {
   coverSeed,
   useNowPlayingPalette,
 } from "@/amusic/composables/useNowPlayingPalette";
+import { requestedFullscreenPanel } from "@/amusic/state";
 import FsControls from "./FsControls.vue";
 import FsDock, { type FsPanel } from "./FsDock.vue";
 import FsLyricsPanel from "./FsLyricsPanel.vue";
@@ -244,6 +245,17 @@ function setPanel(next: FsPanel) {
 function togglePanel(next: Exclude<FsPanel, "none">) {
   setPanel(panel.value === next ? "none" : next);
 }
+
+// a panel asked for by whoever opened us (the bar's lyrics / queue actions)
+watch(
+  isOpen,
+  (open) => {
+    if (!open || requestedFullscreenPanel.value === null) return;
+    setPanel(requestedFullscreenPanel.value);
+    requestedFullscreenPanel.value = null;
+  },
+  { immediate: true },
+);
 
 // wide layouts always show a panel: lyrics when there are any, else the queue
 watch(

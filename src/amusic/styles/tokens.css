@@ -44,3 +44,19 @@
     --am-target: 44px;
   }
 }
+
+/* spec: floating-player-bar, "Last row reachable". Set while the glass bar is
+   mounted: the content scrolls under it, so it reserves the room the bar takes,
+   and upstream's overlays that float clear of "the bottom bars" follow it. */
+:root[data-amusic-bar] {
+  --bottom-bars-height: calc(
+    var(--am-bar-height) + var(--am-bar-gap) + var(--device-inset-bottom, 0px)
+  );
+}
+
+:root[data-amusic-bar] .content-section:not(.content-section--frameless) {
+  padding-bottom: calc(
+    var(--am-bar-height) + 2 * var(--am-bar-gap) +
+      var(--device-inset-bottom, 0px) + var(--am-bar-bottom-extra, 0px) + 16px
+  ) !important;
+}

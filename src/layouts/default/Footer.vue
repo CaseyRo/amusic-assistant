@@ -6,7 +6,17 @@
   <!-- bottom navigation for mobile layout -->
   <BottomNavigation v-if="store.mobileLayout" />
 
+  <!-- amusic: tablet and desktop shapes get the floating glass bar -->
+  <AmusicGlassBar
+    v-if="amusicBar"
+    :style="
+      store.mobileLayout
+        ? { '--am-bar-bottom-extra': 'var(--mobile-navigation-height)' }
+        : undefined
+    "
+  />
   <v-footer
+    v-else
     ref="playerBar"
     app
     color="default"
@@ -31,11 +41,20 @@ import { store } from "@/plugins/store";
 import { useElementSize } from "@vueuse/core";
 import {
   type ComponentPublicInstance,
+  computed,
   onBeforeUnmount,
   ref,
   watchEffect,
 } from "vue";
 import Player from "./PlayerOSD/Player.vue";
+import AmusicGlassBar from "@/amusic/components/bar/AmusicGlassBar.vue";
+import {
+  isPhoneLayout,
+  useAmusicLayout,
+} from "@/amusic/composables/useAmusicLayout";
+
+const amusicLayout = useAmusicLayout();
+const amusicBar = computed(() => !isPhoneLayout(amusicLayout.value));
 
 const OVERLAY_HEIGHT_PROPERTY = "--player-bar-overlay-height";
 const OVERLAY_MARKER_ATTRIBUTE = "data-player-bar-overlay";
