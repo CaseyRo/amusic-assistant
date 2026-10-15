@@ -1,7 +1,6 @@
 <template>
   <!-- Non-mobile: background gradient and player bar -->
   <template v-if="!useFloatingPlayer">
-    <div class="mediacontrols-bg" :data-floating="useFloatingPlayer"></div>
     <!-- the popouts find their top edge to hang above by this id -->
     <div
       id="player-bar"
@@ -232,7 +231,24 @@ watch(
   width: 100%;
   min-height: var(--player-bar-height);
   padding: 8px 15px;
-  background-color: rgb(var(--v-theme-overlay));
+  /* amusic: glass pane - translucent, blurred, rounded, lifted off the page */
+  position: relative;
+  max-width: var(--glass-bar-max-width);
+  margin: 0 auto;
+  border-radius: var(--glass-bar-radius);
+  background-color: rgba(var(--v-theme-overlay), 0.62);
+  /* the artwork tint, kept inside the pane's rounded edge */
+  background-image: linear-gradient(
+    to right,
+    v-bind("backgroundColor"),
+    transparent 320px
+  );
+  /* unprefixed only: see the note on .player-scrim in Footer.vue */
+  backdrop-filter: blur(30px) saturate(180%);
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.08);
+  box-shadow:
+    0 10px 40px rgb(0 0 0 / 0.18),
+    0 1px 2px rgb(0 0 0 / 0.08);
   .mediacontrols-bottom-center {
     flex: 0 1 40%;
     min-width: 0;
@@ -240,6 +256,13 @@ watch(
 
   &[data-mobile="true"] {
     display: flex;
+    max-width: none;
+    margin: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    background-image: none;
     background-color: transparent;
     min-height: 0;
     /* the artwork ends up as far from the top as from the left once the row
