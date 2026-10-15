@@ -1,5 +1,9 @@
 # Tasks
 
+## 0. Design confirmation
+
+- [ ] 0.1 Add Paper artboards for the output picker (phone sheet and desktop popover) and the library in the new accent and typeface, and verify that the user has confirmed them before groups 9 and 10 start
+
 ## 1. Baseline
 
 - [ ] 1.1 Merge `upstream/main` into `main`, then verify that `pnpm install`, `pnpm build` and `pnpm test:run` all pass and that the dev server connects to the 2.11.0b5 server
@@ -20,7 +24,6 @@
 ## 4. Quality badge
 
 - [ ] 4.1 Build `AmusicQualityBadge` on `useStreamQuality` and `useActiveAudioPath` (tier label, tier colour, format summary, range for groups, hidden when unknown, tap opens `AudioProcessingDetails`). Verify with a Vitest test of the format-summary helper (`FLAC 44.1`, `MP3 192`, unknown → empty) and by tapping it on the playing NAS track
-- [ ] 4.2 Add per-room badges to the player picker through one `amusic:`-marked slot and verify that two rooms at different tiers each show their own badge
 
 ## 5. Fullscreen now playing
 
@@ -52,11 +55,26 @@
 - [ ] 7.5 Implement the popup host with its one-time "can't stay on top" hint (Firefox, and Chromium over plain HTTP), and verify in Firefox and in Chrome on the `http://` tailnet URL
 - [ ] 7.6 Add the entry point to the glass bar and the fullscreen more-menu on non-phone layouts only, and verify that it is absent at 390×844
 
-## 8. Integration
+## 9. App theme
 
-- [ ] 8.1 Run `pnpm lint:check`, `vue-tsc --noEmit` and `pnpm test:run` and verify all pass
-- [ ] 8.2 Walk all five layouts plus the mini player on the live server with NAS music playing, and compare each against its Paper artboard. Record screenshots in the README and verify the README links them
-- [ ] 8.3 Verify that `git diff upstream/main --stat -- src ':!src/amusic'` shows only `amusic:`-marked mount-point edits in upstream files
+- [ ] 9.1 Switch the app font to the system stack with self-hosted Inter (`vite.config.ts` webfont URL, `settings.scss`, global CSS). Verify that the built bundle has no `fonts.googleapis.com` requests and that the computed font on macOS is the system font
+- [ ] 9.2 Override the neutral surface tokens for light and dark in `src/amusic/styles/theme.css` and verify the library, sidebar and a settings page in both themes
+- [ ] 9.3 Implement `useArtworkAccent()` (palette → AA-clamped accent → Vuetify and Tailwind primary, fallback coral, smooth or reduced-motion transition) and verify with a Vitest test that pale and dark inputs are clamped to AA and that an empty palette returns the fallback
+- [ ] 9.4 Verify in the running app that the active nav item, primary buttons and progress follow the playing track's artwork, and that they return to coral when playback stops
+
+## 10. Output picker
+
+- [ ] 10.1 Build `AmusicOutputPicker` (glass sheet on phones, anchored popover on wider layouts) behind an `amusic:` switch on `store.showPlayersMenu`, and verify it opens from the bar room chip, the fullscreen room control and the phone dock
+- [ ] 10.2 Build the room rows (icon, name, now-playing art and title or "Not playing", quality badge, checkmark on the active room, playing rooms first, search above eight rooms) and verify with the live rooms (Kitchen, Bedroom, musicmachine…)
+- [ ] 10.3 Add per-room volume sliders that do not change the active room, and verify by adjusting a non-active room's volume
+- [ ] 10.4 Add grouping toggles for compatible rooms only, and verify by adding and removing a room from a group on the live server
+- [ ] 10.5 Verify that selecting a row makes it active, closes the picker, and that the bar and fullscreen follow
+
+## 11. Integration
+
+- [ ] 11.1 Run `pnpm lint:check`, `vue-tsc --noEmit` and `pnpm test:run` and verify all pass
+- [ ] 11.2 Walk all five layouts plus the mini player, the output picker and the themed library on the live server with NAS music playing, and compare each against its Paper artboard. Record screenshots in the README and verify the README links them
+- [ ] 11.3 Verify that `git diff upstream/main --stat -- src ':!src/amusic'` shows only `amusic:`-marked mount-point edits in upstream files
 
 ## Workflow follow-up
 

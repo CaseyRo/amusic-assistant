@@ -21,7 +21,7 @@ See proposal.md for motivation. The relevant current state of the code:
 - Reuse MA's data and behaviour (lyrics sync, queue, quality, picker, media session). Only presentation is rebuilt.
 
 **Non-Goals:**
-- Restyling the rest of the app (library, settings, navigation).
+- Redesigning the layout of library, settings or navigation pages. Only their colours and typeface change, through the theme.
 - Native desktop-app always-on-top. Only the browser mechanisms are in scope.
 - Changes to the server or its API.
 - Sending any of this upstream, for now.
@@ -89,7 +89,29 @@ Revert the spike's edits to `Player.vue`. `AmusicGlassBar` is a new component wi
 
 For per-room badges in the picker, each room's audio path is resolved the same way. The picker gets a single `amusic:`-marked slot for this.
 
-### 8. Testing
+### 8. Output picker is a fork-owned component behind the existing open flag
+`AmusicOutputPicker` replaces how `PlayerSelect.vue` is shown when `store.showPlayersMenu` is set. One `amusic:` switch is enough, because the flag and the store actions (setting the active player, group membership, volume) stay upstream's.
+
+- Rows reuse upstream helpers for player ordering (`useOrderedPlayers`), selectable players and group compatibility, so behaviour matches upstream.
+- Phone layouts render it as a bottom sheet; wider layouts render a popover anchored to the element that opened it.
+
+*Alternative:* restyle `PlayerSelect.vue` in place. Rejected for the same merge-cost reason as decision 1.
+
+### 9. Theme: one accent variable, driven by the palette
+`useArtworkAccent()` reads `current_media.palette` (or the generated-cover palette) and sets one CSS custom property. The property is converted to Vuetify's `--v-theme-primary` and to shadcn/Tailwind's `--primary`, so upstream components follow without edits.
+
+- Lightness is clamped in OKLCH until AA contrast against the current surface is met.
+- Transitions use `@property`-registered colour variables, or are instant under `prefers-reduced-motion`.
+- The neutral surface tokens are overridden once in `src/amusic/styles/theme.css`.
+- The fixed fallback accent is the Tidal coral from the Paper designs.
+
+### 10. Fonts: system stack plus self-hosted Inter
+`font-family: -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "Inter", system-ui, sans-serif` is set app-wide.
+
+- Inter is self-hosted with the build plugin already in use (`vite-plugin-webfont-dl`, which downloads at build time and serves from our own origin), replacing upstream's Roboto URL. There is no runtime Google request and no new dependency.
+- Vuetify's `$body-font-family` in `src/styles/settings.scss` is pointed at the same stack.
+
+### 11. Testing
 - Vitest unit tests for the pure parts:
   - layout classification, for every spec scenario's dimensions
   - generated-cover determinism
