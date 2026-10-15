@@ -14,11 +14,11 @@ App surfaces (content background, sidebar, cards, dialogs) SHALL use neutral col
 - **THEN** the content background is white and the sidebar a light neutral grey
 
 ### Requirement: Accent follows the artwork
-The app's accent colour SHALL be derived from the current track's artwork palette. It is used for the active navigation item, primary buttons, progress fills, toggles and links. When nothing is playing, the accent SHALL be a fixed fallback colour.
+The app's accent colour SHALL be derived from the current track's artwork palette. It is used for the app's wordmark, the active navigation item, primary buttons, progress fills, toggles and links. When nothing is playing, the accent SHALL be a fixed fallback colour.
 
 #### Scenario: Track with a pink cover
 - **WHEN** a track whose palette is dominated by pink is playing
-- **THEN** the active sidebar item, primary buttons and progress fills use a pink accent
+- **THEN** the wordmark, the active sidebar item, primary buttons and progress fills use a pink accent
 
 #### Scenario: Nothing playing
 - **WHEN** the active player has nothing loaded

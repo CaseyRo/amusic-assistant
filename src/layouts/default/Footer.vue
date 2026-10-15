@@ -112,18 +112,9 @@ function clearOverlay() {
   z-index: 1000 !important;
 }
 
-/* amusic: the desktop bar floats as a glass pane over the content, Apple Music
-   style. The footer itself is only a transparent positioning strip; it lets
-   clicks through so the content beside the pane stays usable. */
 .v-footer.mediacontrols-player-default {
-  padding: 0 calc(var(--glass-bar-gap) + var(--device-inset-right))
-    var(--glass-bar-gap) calc(var(--glass-bar-gap) + var(--device-inset-left)) !important;
-  background: transparent !important;
-  pointer-events: none;
-}
-
-.v-footer.mediacontrols-player-default > * {
-  pointer-events: auto;
+  padding-right: var(--device-inset-right) !important;
+  padding-left: var(--device-inset-left) !important;
 }
 
 .v-footer.mediacontrols-player-float {

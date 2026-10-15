@@ -2,13 +2,13 @@
 
 ## 0. Design confirmation
 
-- [ ] 0.1 Add Paper artboards for the output picker (phone sheet and desktop popover) and the library in the new accent and typeface, and verify that the user has confirmed them before groups 9 and 10 start
+- [x] 0.1 Add Paper artboards for the output picker (phone sheet and desktop popover) and the library in the new accent and typeface, and verify that the user has confirmed them before groups 9 and 10 start
 
 ## 1. Baseline
 
-- [ ] 1.1 Merge `upstream/main` into `main`, then verify that `pnpm install`, `pnpm build` and `pnpm test:run` all pass and that the dev server connects to the 2.11.0b5 server
-- [ ] 1.2 Revert the glass spike's edits in `Player.vue` and the `.mediacontrols` glass styles, keeping the click-through footer strip and the `--glass-bar-*` tokens. Verify the desktop bar renders as upstream at 1440×900
-- [ ] 1.3 Create `src/amusic/` (`components/`, `composables/`, `styles/`) with a `README.md` listing the upstream components we re-compose. Verify the folder exists and the README names each import
+- [x] 1.1 Merge `upstream/main` into `main`, then verify that `pnpm install`, `pnpm build` and `pnpm test:run` all pass and that the dev server connects to the 2.11.0b5 server
+- [x] 1.2 Revert the glass spike's edits in `Player.vue`, `Footer.vue` and `--bottom-bars-height`, keeping only the `--glass-bar-*` tokens (the click-through footer strip returns in 6.2). Verify the desktop bar renders as upstream at 1440×900
+- [x] 1.3 Create `src/amusic/` (`components/`, `composables/`, `styles/`) with a `README.md` listing the upstream components we re-compose. Verify the folder exists and the README names each import
 
 ## 2. Layout classification
 
@@ -40,7 +40,7 @@
 ## 6. Floating glass bar
 
 - [ ] 6.1 Build `AmusicGlassBar` (transport · centre display with art, title, artist and album, badge and hairline progress · lyrics, queue, volume, room) and mount it from `Footer.vue` on non-phone layouts. Verify against the Paper library artboard at 1440×900
-- [ ] 6.2 Make content flow beneath the bar (drop `v-main` bottom padding on non-phone layouts, content bottom padding of bar height plus gap) and verify that the last album row scrolls fully clear and that clicks beside the bar reach the content
+- [ ] 6.2 Make content flow beneath the bar (a transparent, click-through footer strip; drop `v-main` bottom padding on non-phone layouts, content bottom padding of bar height plus gap) and verify that the last album row scrolls fully clear and that clicks beside the bar reach the content
 - [ ] 6.3 Implement container-query degradation (drop shuffle and repeat, then album text) and verify at 820×1180 that play/pause, title and room remain
 - [ ] 6.4 Wire the centre display, lyrics and queue actions to open fullscreen with the right panel, and verify each one
 - [ ] 6.5 Give the phone floating card the glass treatment and verify at 390×844 that it still taps through to fullscreen
