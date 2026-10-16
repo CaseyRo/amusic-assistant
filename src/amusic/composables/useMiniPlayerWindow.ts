@@ -16,6 +16,10 @@ interface DocumentPip {
 }
 
 const PIP_SIZE = 320;
+// the window the user last dragged it to, reused on the next open
+const PIP_SIZE_KEY = "amusic.miniSize";
+const PIP_MIN = 200;
+const PIP_MAX = 1600;
 const POPUP_FEATURES = "popup,width=340,height=360";
 const POPUP_NAME = "amusic-mini";
 const HINT_KEY = "amusic.miniHint.";
@@ -64,13 +68,45 @@ function copyStyles(target: Document) {
   target.body.style.cssText = "margin:0;height:100vh;overflow:hidden";
 }
 
+function clampPip(value: unknown): number {
+  const n = Number(value);
+  return Number.isFinite(n)
+    ? Math.min(PIP_MAX, Math.max(PIP_MIN, n))
+    : PIP_SIZE;
+}
+
+function savedPipSize() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PIP_SIZE_KEY) ?? "null");
+    if (saved) {
+      return { width: clampPip(saved.width), height: clampPip(saved.height) };
+    }
+  } catch {
+    // unreadable or blocked storage: the default size it is
+  }
+  return { width: PIP_SIZE, height: PIP_SIZE };
+}
+
+function savePipSize(win: Window) {
+  try {
+    // inner size: requestWindow sizes the content, below the title bar
+    localStorage.setItem(
+      PIP_SIZE_KEY,
+      JSON.stringify({ width: win.innerWidth, height: win.innerHeight }),
+    );
+  } catch {
+    // storage blocked: it opens at the default size next time
+  }
+}
+
 async function openDocumentPip() {
   const dpip = (window as unknown as { documentPictureInPicture: DocumentPip })
     .documentPictureInPicture;
-  const win = await dpip.requestWindow({ width: PIP_SIZE, height: PIP_SIZE });
+  const win = await dpip.requestWindow(savedPipSize());
   // ponytail: styles are copied once; a theme switch while open shows on reopen
   copyStyles(win.document);
   win.addEventListener("pagehide", () => {
+    savePipSize(win);
     pipBody.value = null;
     isOpen.value = false;
   });

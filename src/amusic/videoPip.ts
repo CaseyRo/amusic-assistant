@@ -12,9 +12,12 @@ import { coverSeed } from "@/amusic/composables/useNowPlayingPalette";
  * goes picture-in-picture. Its play/pause and the system media keys drive the
  * active player; the frame is redrawn whenever the track changes.
  */
-const SIZE = 512;
+// drawn at the largest artwork size the imageproxy serves, so the window stays
+// sharp when it is dragged bigger; the layout below is in 512px units
+const SIZE = 1024;
+const UNIT = SIZE / 512;
 const FRAME_RATE = 2;
-const TEXT_PAD = 32;
+const TEXT_PAD = 32 * UNIT;
 // long enough for the stream to deliver a frame at FRAME_RATE
 const FRAME_SETTLE_MS = 600;
 
@@ -42,16 +45,21 @@ function drawText(ctx: CanvasRenderingContext2D) {
   ctx.fillStyle = shade;
   ctx.fillRect(0, SIZE * 0.5, SIZE, SIZE * 0.5);
   ctx.fillStyle = "#fff";
-  ctx.font = "700 34px -apple-system, system-ui, sans-serif";
+  ctx.font = `700 ${34 * UNIT}px -apple-system, system-ui, sans-serif`;
   ctx.fillText(
     media?.title ?? store.activePlayer?.name ?? "",
     TEXT_PAD,
-    SIZE - 70,
+    SIZE - 70 * UNIT,
     SIZE - 2 * TEXT_PAD,
   );
   ctx.fillStyle = "rgb(255 255 255 / 0.8)";
-  ctx.font = "500 24px -apple-system, system-ui, sans-serif";
-  ctx.fillText(media?.artist ?? "", TEXT_PAD, SIZE - 34, SIZE - 2 * TEXT_PAD);
+  ctx.font = `500 ${24 * UNIT}px -apple-system, system-ui, sans-serif`;
+  ctx.fillText(
+    media?.artist ?? "",
+    TEXT_PAD,
+    SIZE - 34 * UNIT,
+    SIZE - 2 * TEXT_PAD,
+  );
 }
 
 function drawGenerated(ctx: CanvasRenderingContext2D) {
@@ -80,6 +88,18 @@ function refreshFrame() {
   video.play().then(() => setTimeout(done, FRAME_SETTLE_MS), done);
 }
 
+/** Asks the imageproxy for the artwork at the frame's size instead of its 512px thumbnail. */
+function largeArtwork(url: string): string {
+  try {
+    const parsed = new URL(url);
+    if (!parsed.pathname.startsWith("/imageproxy/")) return url;
+    parsed.searchParams.set("size", String(SIZE));
+    return parsed.toString();
+  } catch {
+    return url;
+  }
+}
+
 function paint() {
   if (composed) canvas?.getContext("2d")?.drawImage(composed, 0, 0);
 }
@@ -97,7 +117,7 @@ function redraw() {
   // fetched rather than loaded as an <img crossorigin>: Safari reuses the copy
   // the bar already loaded without CORS, fails the image and leaves only the
   // generated cover. A fetched blob never taints the canvas.
-  fetch(getMediaImageUrl(url), { mode: "cors" })
+  fetch(largeArtwork(getMediaImageUrl(url)), { mode: "cors" })
     .then((response) =>
       response.ok ? response.blob() : Promise.reject(response.status),
     )
