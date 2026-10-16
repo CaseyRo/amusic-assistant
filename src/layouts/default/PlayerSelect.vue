@@ -142,7 +142,7 @@
           />
         </div>
 
-        <div class="space-y-0.5 px-2 pt-2">
+        <div class="space-y-2 px-3 pt-3">
           <p
             v-if="filteredPlayers.length === 0"
             class="text-muted-foreground px-3 py-8 text-center text-sm"

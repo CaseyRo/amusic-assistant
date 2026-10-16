@@ -6,9 +6,29 @@ Music Assistant has become great at *what* it plays. This fork is about *how it 
 
 - **Fullscreen now playing:** blurred-artwork backdrop, big artwork, synced lyrics beside it. Designed separately for phone, tablet and desktop instead of one layout stretched across all three.
 - **Glass player bar:** a floating, translucent pane over the content instead of the full-width bottom strip.
-- **Always-on-top mini player:** a small window that stays in front of everything else (Document Picture-in-Picture in Chromium browsers).
+- **Always-on-top mini player:** a small window that stays in front of everything else. Document Picture-in-Picture in Chromium browsers, video Picture-in-Picture in Safari, a popup elsewhere.
+- **Output picker:** AirPlay-style room list with what each room is playing, its quality, its volume and one-tap grouping.
+- **Theme:** the accent colour follows the playing artwork, on neutral surfaces, in the platform's own typeface.
 
 > **Status:** early work in progress. Expect rough edges.
+
+## Screenshots
+
+Recorded against a live Music Assistant 2.11 server.
+
+| Desktop: library and glass bar | Desktop: fullscreen with lyrics |
+| --- | --- |
+| ![Library with the floating glass bar and an accent taken from the playing artwork](docs/screenshots/desktop-library.jpg) | ![Fullscreen now playing with synced lyrics](docs/screenshots/desktop-fullscreen-lyrics.jpg) |
+| **Desktop: output picker** | **Tablet landscape** |
+| ![Output picker popover above the room button](docs/screenshots/desktop-output-picker.jpg) | ![Two-column fullscreen on a landscape tablet](docs/screenshots/tablet-landscape.jpg) |
+
+| Tablet portrait | Phone | Phone: output picker | Phone: library |
+| --- | --- | --- | --- |
+| ![Tablet portrait with lyrics and collapsed artwork](docs/screenshots/tablet-portrait.jpg) | ![Phone now playing](docs/screenshots/phone-now-playing.jpg) | ![Glass room sheet on a phone](docs/screenshots/phone-output-picker.jpg) | ![Phone library with the glass player card](docs/screenshots/phone-library.jpg) |
+
+| Phone landscape | Mini player |
+| --- | --- |
+| ![Phone landscape, everything on one screen](docs/screenshots/phone-landscape.jpg) | ![Always-on-top mini player window](docs/screenshots/mini-player.jpg) |
 
 ## Requirements
 

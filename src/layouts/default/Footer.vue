@@ -59,6 +59,7 @@ import {
   useAmusicLayout,
 } from "@/amusic/composables/useAmusicLayout";
 
+// amusic: which bar to show follows the layout shape, not the breakpoint
 const amusicLayout = useAmusicLayout();
 const amusicBar = computed(() => !isPhoneLayout(amusicLayout.value));
 

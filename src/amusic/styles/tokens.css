@@ -112,3 +112,9 @@
     background: var(--am-glass-fallback) !important;
   }
 }
+
+/* upstream's picker backdrop stops at the old full-width bar; the glass bar
+   floats (z-index 1000, above the backdrop), so the blur reaches the bottom */
+:root[data-amusic-bar] .player-select-backdrop.player-select-desktop-offset {
+  bottom: 0 !important;
+}

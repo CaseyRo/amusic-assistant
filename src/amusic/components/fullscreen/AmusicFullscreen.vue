@@ -451,8 +451,12 @@ onBeforeUnmount(() => setStatusBarColorOverride(undefined));
   min-height: 0;
 }
 
+/* the collapsed header and the lyrics share the full width, 64px in from the
+   edge as in the Paper artboard; only the controls stay capped */
+.am-fs[data-layout="tablet-portrait"] .am-fs__header,
 .am-fs[data-layout="tablet-portrait"] .am-fs__panel {
   max-width: none;
+  padding-inline: 36px;
 }
 
 .am-fs__controls {

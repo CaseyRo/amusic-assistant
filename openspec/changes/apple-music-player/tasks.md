@@ -72,9 +72,9 @@
 
 ## 11. Integration
 
-- [ ] 11.1 Run `pnpm lint:check`, `vue-tsc --noEmit` and `pnpm test:run` and verify all pass
-- [ ] 11.2 Walk all five layouts plus the mini player, the output picker and the themed library on the live server with NAS music playing, and compare each against its Paper artboard. Record screenshots in the README and verify the README links them
-- [ ] 11.3 Verify that `git diff upstream/main --stat -- src ':!src/amusic'` shows only `amusic:`-marked mount-point edits in upstream files
+- [x] 11.1 Run `pnpm lint:check`, `vue-tsc --noEmit` and `pnpm test:run` and verify all pass
+- [x] 11.2 Walk all five layouts plus the mini player, the output picker and the themed library on the live server with NAS music playing, and compare each against its Paper artboard. Record screenshots in the README and verify the README links them
+- [x] 11.3 Verify that `git diff upstream/main --stat -- src ':!src/amusic'` shows only `amusic:`-marked mount-point edits in upstream files
 
 ## Workflow follow-up
 
