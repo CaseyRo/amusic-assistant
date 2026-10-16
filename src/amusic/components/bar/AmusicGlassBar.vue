@@ -98,8 +98,9 @@
         >
           <PictureInPicture2Icon class="size-[18px]" />
         </button>
-        <PlayerBarVolumeControl
+        <AmusicBarVolume
           v-if="store.activePlayer"
+          class="am-bar__volume"
           :player="store.activePlayer"
         />
         <button
@@ -130,9 +131,9 @@ import PlayBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/PlayBtn.vue";
 import PreviousBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/PreviousBtn.vue";
 import RepeatBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/RepeatBtn.vue";
 import ShuffleBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/ShuffleBtn.vue";
-import PlayerBarVolumeControl from "@/layouts/default/PlayerOSD/PlayerBarVolumeControl.vue";
 import { store } from "@/plugins/store";
 import AmusicCover from "@/amusic/components/AmusicCover.vue";
+import AmusicBarVolume from "@/amusic/components/bar/AmusicBarVolume.vue";
 import AmusicQualityBadge from "@/amusic/components/AmusicQualityBadge.vue";
 import GlassSurface from "@/amusic/components/GlassSurface.vue";
 import { coverSeed } from "@/amusic/composables/useNowPlayingPalette";
@@ -311,21 +312,13 @@ const stripStyle = computed(() =>
   color: rgba(var(--v-theme-on-surface), 0.78);
 }
 
+/* the open volume pill takes their place, as in Apple Music */
+.am-bar__actions:has(.am-vol[data-open]) .am-bar__action {
+  visibility: hidden;
+}
+
 .am-bar__action:hover {
   background: rgba(var(--v-theme-on-surface), 0.06);
-}
-
-/* upstream's volume control is a labelled column button with several roots,
-   so it is reached from the row; here it is just an icon */
-.am-bar__actions :deep(.player-bar-volume-button) {
-  width: var(--am-target) !important;
-  height: var(--am-target) !important;
-  padding: 0 !important;
-  border-radius: 999px !important;
-}
-
-.am-bar__actions :deep(.player-bar-action-label) {
-  display: none !important;
 }
 
 /* Apple's bar has a bare play glyph, no disc */
@@ -370,7 +363,7 @@ const stripStyle = computed(() =>
 
   .am-bar__album,
   .am-bar__badge,
-  .am-bar__actions :deep(.player-bar-volume-button) {
+  .am-bar__volume {
     display: none !important;
   }
 
