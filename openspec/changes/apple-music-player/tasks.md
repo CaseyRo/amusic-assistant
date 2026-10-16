@@ -48,12 +48,12 @@
 
 ## 7. Mini player
 
-- [ ] 7.1 Build `AmusicMiniPlayer.vue` (artwork, title, artist and room, badge, progress, glass transport strip) and verify it standalone through `#/?frameless&amusicMini=1`
-- [ ] 7.2 Implement `useMiniPlayerWindow()` host selection (document PiP / video PiP / popup, insecure-origin fallback) and verify with a Vitest test that stubs each feature combination
-- [ ] 7.3 Implement the document-PiP host (stylesheet copy, theme mirror, Teleport, close on unload) and verify in Chrome on localhost: the window stays on top, next skips, and a track change from another client updates it
+- [x] 7.1 Build `AmusicMiniPlayer.vue` (artwork, title, artist and room, badge, progress, glass transport strip) and verify it standalone through `#/?frameless&amusicMini=1`
+- [x] 7.2 Implement `useMiniPlayerWindow()` host selection (document PiP / video PiP / popup, insecure-origin fallback) and verify with a Vitest test that stubs each feature combination
+- [x] 7.3 Implement the document-PiP host (stylesheet copy, theme mirror, Teleport, close on unload) and verify in Chrome on localhost: the window stays on top, next skips, and a track change from another client updates it
 - [ ] 7.4 Implement the Safari video-PiP host (canvas → stream → video, redraw on track change, Media Session handlers) and verify in Safari that the window floats, updates on track change, and that play/pause works from the system controls
 - [ ] 7.5 Implement the popup host with its one-time "can't stay on top" hint (Firefox, and Chromium over plain HTTP), and verify in Firefox and in Chrome on the `http://` tailnet URL
-- [ ] 7.6 Add the entry point to the glass bar and the fullscreen more-menu on non-phone layouts only, and verify that it is absent at 390×844
+- [x] 7.6 Add the entry point to the glass bar and the fullscreen more-menu on non-phone layouts only, and verify that it is absent at 390×844
 
 ## 9. App theme
 

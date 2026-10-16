@@ -170,7 +170,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDownIcon } from "@lucide/vue";
+import { ChevronDownIcon, PictureInPicture2Icon } from "@lucide/vue";
 import { computed, markRaw, onBeforeUnmount, ref, watch } from "vue";
 import { useEventListener } from "@vueuse/core";
 import PanelDragHandle from "@/components/PanelDragHandle.vue";
@@ -187,6 +187,7 @@ import {
   isStackedLayout,
   useAmusicLayout,
 } from "@/amusic/composables/useAmusicLayout";
+import { useMiniPlayerWindow } from "@/amusic/composables/useMiniPlayerWindow";
 import { useNowPlayingLyrics } from "@/amusic/composables/useNowPlayingLyrics";
 import {
   coverSeed,
@@ -203,6 +204,7 @@ import FsViewToggle from "./FsViewToggle.vue";
 const stageRef = ref<HTMLElement>();
 // the dialog fills the window, so its box is the window until it mounts
 const layout = useAmusicLayout(stageRef);
+const mini = useMiniPlayerWindow();
 const wide = computed(
   () => !isPhoneLayout(layout.value) && !isStackedLayout(layout.value),
 );
@@ -308,6 +310,14 @@ function openMoreMenu(evt: Event) {
     items.unshift({
       label: isEpisode.value ? "transcript_offset" : "lyrics_offset",
       component: markRaw(LyricsOffsetMenuControl),
+    });
+  }
+  // spec: mini-player-window, entry point on desktop and tablet only
+  if (!isPhoneLayout(layout.value)) {
+    items.push({
+      label: "amusic_mini_player",
+      icon: markRaw(PictureInPicture2Icon),
+      action: () => mini.open(),
     });
   }
   eventbus.emit("contextmenu", {

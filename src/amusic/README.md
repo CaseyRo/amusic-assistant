@@ -22,7 +22,9 @@ merge. Check here first.
 | `src/layouts/default/PlayerOSD/PlayerControlBtn/*` | transport buttons |
 | `src/components/QualityDetailsBtn.vue`, `src/composables/useStreamQuality.ts` | quality badge |
 | `src/composables/useOrderedPlayers.ts`, `src/helpers/players.ts` | output picker |
-| `src/helpers/mediaSession.ts` | Safari mini player controls |
+| `src/layouts/default/PlayerOSD/PlayerBarVolumeControl.vue` | glass bar volume |
+| `src/helpers/player_menu_items.ts` | fullscreen more-menu |
+| `api.playerCommand*` | Safari mini player (video picture-in-picture) controls |
 
 ## Upstream mount points
 

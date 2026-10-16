@@ -32,8 +32,9 @@ See proposal.md for motivation. The relevant current state of the code:
 New code goes in `src/amusic/`: `components/` (fullscreen stage, glass bar, mini player, glass primitives, quality badge wrapper), `composables/` (layout class, artwork backdrop, picture-in-picture) and `styles/` (glass tokens).
 
 Upstream files get only a mount switch:
-- `PlayerTrackDetails.vue` renders `AmusicFullscreen` in place of `PlayerFullscreen`.
-- `Footer.vue` renders `AmusicGlassBar` on non-phone layouts.
+- `PlayerTrackDetails.vue` drops `PlayerFullscreen`.
+- `Footer.vue` renders `AmusicGlassBar` on non-phone layouts, and mounts `AmusicFullscreen` and the mini player's picture-in-picture host once, for every layout. (They first lived in `PlayerTrackDetails.vue`, which the glass bar does not render, so the bar could not open fullscreen.)
+- `Default.vue` renders only `AmusicMiniPlayer` for the popup window (`?amusicMini`).
 
 *Alternative:* restyle `PlayerFullscreen.vue` in place. Rejected, because it is 1,800 lines of upstream churn and every merge would conflict.
 
@@ -80,7 +81,9 @@ Revert the spike's edits to `Player.vue`. `AmusicGlassBar` is a new component wi
 2. **Video picture-in-picture** (`document.pictureInPictureEnabled`, Safari). Draw artwork and title onto a 512×512 canvas, `captureStream()` it into a muted `<video>`, then `requestPictureInPicture()`.
    - Redraw on track change.
    - Register Media Session play/pause/next/previous handlers through the existing helpers, so the window's system controls work.
-3. **Popup** (anything else). `window.open('#/?frameless&amusicMini=1', …, 'width=340,height=360')`. The existing `frameless` mode renders only the mini player.
+3. **Popup** (anything else). `window.open('#/discover?frameless&amusicMini=1&player=<id>', …, 'width=340,height=360')`. `frameless` hides the app chrome and `Default.vue` renders only the mini player. The main window follows active-room changes by rewriting the popup's hash, and closes it on `pagehide`.
+
+In Safari the video is prepared on mount, because `requestPictureInPicture()` must run inside the click. A paused video shows only frames it has decoded, so after a redraw while paused it plays for a moment to pick up the new frame.
 
 *Alternative for Safari:* a popup only. Rejected, because the user wants it to stay on top, and video picture-in-picture is the only stay-on-top mechanism Safari offers.
 

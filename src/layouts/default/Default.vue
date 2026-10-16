@@ -2,7 +2,12 @@
   <v-app>
     <!-- a single view across both modes, so toggling fullscreen swaps the
          chrome without tearing down the view behind it -->
-    <MainView />
+    <!-- amusic: the mini player's popup window renders only the mini player -->
+    <AmusicMiniPlayer
+      v-if="route.query.amusicMini !== undefined"
+      class="fixed inset-0"
+    />
+    <MainView v-else />
     <Footer v-if="!store.frameless" />
   </v-app>
   <reload-prompt />
@@ -11,6 +16,7 @@
 
 <script lang="ts" setup>
 import MainView from "./View.vue";
+import AmusicMiniPlayer from "@/amusic/components/mini/AmusicMiniPlayer.vue";
 import Footer from "./Footer.vue";
 import ReloadPrompt from "./ReloadPrompt.vue";
 import SetupPausedBanner from "@/components/onboarding/SetupPausedBanner.vue";

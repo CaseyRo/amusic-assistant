@@ -33,8 +33,10 @@
   >
     <Player :use-floating-player="store.mobileLayout" />
   </v-footer>
-  <!-- amusic: one fullscreen player for both the glass bar and the phone card -->
+  <!-- amusic: one fullscreen player for both the glass bar and the phone card,
+       and the mini player's picture-in-picture window -->
   <AmusicFullscreen />
+  <AmusicMiniPlayerHost />
 </template>
 
 <script setup lang="ts">
@@ -50,6 +52,7 @@ import {
 } from "vue";
 import Player from "./PlayerOSD/Player.vue";
 import AmusicFullscreen from "@/amusic/components/fullscreen/AmusicFullscreen.vue";
+import AmusicMiniPlayerHost from "@/amusic/components/mini/AmusicMiniPlayerHost.vue";
 import AmusicGlassBar from "@/amusic/components/bar/AmusicGlassBar.vue";
 import {
   isPhoneLayout,

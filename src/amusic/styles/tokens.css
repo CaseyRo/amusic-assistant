@@ -65,7 +65,6 @@
    the artwork tint stays as a faint wash over a blurred, translucent pane. */
 .mediacontrols-player-float .mediacontrols-mobile-container {
   background: var(--am-glass-fill-strong) !important;
-  -webkit-backdrop-filter: var(--am-glass-blur);
   backdrop-filter: var(--am-glass-blur);
   border: 1px solid var(--am-glass-rim);
   box-shadow: var(--am-glass-shadow) !important;
@@ -75,8 +74,20 @@
   opacity: 0.35;
 }
 
-@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+@supports not (backdrop-filter: blur(1px)) {
   .mediacontrols-player-float .mediacontrols-mobile-container {
     background: var(--am-glass-fallback) !important;
   }
+}
+
+/* Safari's picture-in-picture source (videoPip.ts): it must be in the page and
+   playing, but never seen there */
+.am-video-pip {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
 }

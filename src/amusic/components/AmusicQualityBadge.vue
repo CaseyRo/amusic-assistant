@@ -1,12 +1,17 @@
 <template>
   <!-- spec: stream-quality-indicator. Hidden, with no space reserved, when the
        tier is unknown; opens MA's own signal-path details. -->
-  <Popover v-if="activeAudioPath && label" v-model:open="open">
+  <Popover
+    v-if="activeAudioPath && label"
+    :open="open"
+    @update:open="(value) => (open = !readonly && value)"
+  >
     <PopoverTrigger as-child>
       <button
         type="button"
         class="am-quality"
         :data-tone="tone"
+        :data-readonly="readonly || undefined"
         :style="{ '--tier': tierColor }"
         :aria-label="
           $t('show_audio_chain_details_for_quality', { quality: label })
@@ -59,8 +64,14 @@ interface Props {
   /** "backdrop" for light-on-artwork surfaces, "app" for themed surfaces */
   tone?: "app" | "backdrop";
   showFormat?: boolean;
+  /** shows the tier only; for windows the details popover cannot reach */
+  readonly?: boolean;
 }
-withDefaults(defineProps<Props>(), { tone: "app", showFormat: true });
+withDefaults(defineProps<Props>(), {
+  tone: "app",
+  showFormat: true,
+  readonly: false,
+});
 
 const open = ref(false);
 const { activeAudioPath } = useActiveAudioPath();
@@ -102,6 +113,10 @@ const summary = computed(() =>
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
+}
+
+.am-quality[data-readonly] {
+  cursor: default;
 }
 
 /* the pill stays small; the hit area grows to the touch target */

@@ -90,6 +90,14 @@
         >
           <ListIcon class="size-[18px]" />
         </button>
+        <button
+          type="button"
+          class="am-bar__action"
+          :aria-label="$t('amusic_mini_player')"
+          @click="mini.open()"
+        >
+          <PictureInPicture2Icon class="size-[18px]" />
+        </button>
         <PlayerBarVolumeControl
           v-if="store.activePlayer"
           :player="store.activePlayer"
@@ -109,11 +117,14 @@
 </template>
 
 <script setup lang="ts">
-import { ListIcon, MessageSquareQuoteIcon } from "@lucide/vue";
-import { useElementBounding, useIntervalFn } from "@vueuse/core";
+import {
+  ListIcon,
+  MessageSquareQuoteIcon,
+  PictureInPicture2Icon,
+} from "@lucide/vue";
+import { useElementBounding } from "@vueuse/core";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import PlayerIcon from "@/components/PlayerIcon.vue";
-import { resolveActiveElapsedTime } from "@/helpers/activeElapsedTime";
 import NextBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/NextBtn.vue";
 import PlayBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/PlayBtn.vue";
 import PreviousBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/PreviousBtn.vue";
@@ -125,6 +136,8 @@ import AmusicCover from "@/amusic/components/AmusicCover.vue";
 import AmusicQualityBadge from "@/amusic/components/AmusicQualityBadge.vue";
 import GlassSurface from "@/amusic/components/GlassSurface.vue";
 import { coverSeed } from "@/amusic/composables/useNowPlayingPalette";
+import { useMiniPlayerWindow } from "@/amusic/composables/useMiniPlayerWindow";
+import { useNowPlayingProgress } from "@/amusic/composables/useNowPlayingProgress";
 import { requestedFullscreenPanel } from "@/amusic/state";
 
 const media = computed(() => store.activePlayer?.current_media ?? null);
@@ -141,16 +154,8 @@ const roomLabel = computed(() => {
   return extra ? `${player.name} +${extra}` : player.name;
 });
 
-// a hairline only needs a coarse clock
-const tick = ref(0);
-useIntervalFn(() => tick.value++, 1000);
-const progress = computed(() => {
-  void tick.value;
-  const duration = media.value?.duration;
-  const elapsed = resolveActiveElapsedTime();
-  if (!duration || elapsed == null) return 0;
-  return Math.min(100, Math.max(0, (elapsed / duration) * 100));
-});
+const progress = useNowPlayingProgress();
+const mini = useMiniPlayerWindow();
 
 function openFullscreen(panel: "none" | "lyrics" | "queue") {
   if (!store.activePlayer) {
@@ -164,6 +169,7 @@ function openFullscreen(panel: "none" | "lyrics" | "queue") {
 // centre over the content area, which the sidebar narrows
 const inset = ref<HTMLElement | null>(null);
 onMounted(() => {
+  mini.prepare();
   inset.value = document.querySelector<HTMLElement>(
     '[data-slot="sidebar-inset"]',
   );
