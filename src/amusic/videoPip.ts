@@ -19,10 +19,16 @@ const TEXT_PAD = 32;
 const FRAME_SETTLE_MS = 600;
 
 let video: HTMLVideoElement | null = null;
+// the streamed canvas only produces frames when painted, so a timer repaints it
+// from `composed`, which is drawn once per track
 let canvas: HTMLCanvasElement | null = null;
+let composed: HTMLCanvasElement | null = null;
+let ticker: ReturnType<typeof setInterval> | undefined;
 let stops: WatchStopHandle[] = [];
 // set while we move the video ourselves, so its events are not read as the user's
 let syncing = false;
+// bumped per redraw, so only the latest artwork request draws
+let drawToken = 0;
 
 function activeId() {
   return store.activePlayer?.player_id;
@@ -74,23 +80,39 @@ function refreshFrame() {
   video.play().then(() => setTimeout(done, FRAME_SETTLE_MS), done);
 }
 
+function paint() {
+  if (composed) canvas?.getContext("2d")?.drawImage(composed, 0, 0);
+}
+
 function redraw() {
-  const ctx = canvas?.getContext("2d");
+  const ctx = composed?.getContext("2d");
   if (!ctx) return;
   drawGenerated(ctx);
   drawText(ctx);
+  paint();
   refreshFrame();
   const url = store.activePlayer?.current_media?.image_url;
   if (!url) return;
-  const img = new Image();
-  // without CORS the canvas would be tainted and the stream go blank
-  img.crossOrigin = "anonymous";
-  img.onload = () => {
-    ctx.drawImage(img, 0, 0, SIZE, SIZE);
-    drawText(ctx);
-    refreshFrame();
-  };
-  img.src = getMediaImageUrl(url);
+  const token = ++drawToken;
+  // fetched rather than loaded as an <img crossorigin>: Safari reuses the copy
+  // the bar already loaded without CORS, fails the image and leaves only the
+  // generated cover. A fetched blob never taints the canvas.
+  fetch(getMediaImageUrl(url), { mode: "cors" })
+    .then((response) =>
+      response.ok ? response.blob() : Promise.reject(response.status),
+    )
+    .then((blob) => createImageBitmap(blob))
+    .then((bitmap) => {
+      // a slow image from the previous track must not cover the new one
+      if (token !== drawToken) return;
+      ctx.drawImage(bitmap, 0, 0, SIZE, SIZE);
+      bitmap.close();
+      drawText(ctx);
+      paint();
+      refreshFrame();
+    })
+    // the generated cover drawn above stays as the fallback
+    .catch(() => undefined);
 }
 
 function mirrorPlayState() {
@@ -109,8 +131,11 @@ function mirrorPlayState() {
 export function prepareVideoPip() {
   if (video) return;
   canvas = document.createElement("canvas");
-  canvas.width = SIZE;
-  canvas.height = SIZE;
+  composed = document.createElement("canvas");
+  for (const c of [canvas, composed]) {
+    c.width = SIZE;
+    c.height = SIZE;
+  }
   video = document.createElement("video");
   video.muted = true;
   video.playsInline = true;
@@ -129,13 +154,18 @@ export function prepareVideoPip() {
   });
 
   redraw();
+  ticker = setInterval(paint, 1000 / FRAME_RATE);
   stops = [
+    // one string, so it only fires when the track really changes: an array
+    // is new on every player update, and each redraw first paints the
+    // generated cover, so the artwork never got to stay
     watch(
-      () => [
-        store.activePlayer?.current_media?.uri,
-        store.activePlayer?.current_media?.image_url,
-        store.activePlayer?.player_id,
-      ],
+      () =>
+        [
+          store.activePlayer?.player_id,
+          store.activePlayer?.current_media?.uri,
+          store.activePlayer?.current_media?.image_url,
+        ].join("|"),
       redraw,
     ),
     watch(() => store.activePlayer?.playback_state, mirrorPlayState, {
@@ -162,10 +192,12 @@ export async function openVideoPip(onClose: () => void) {
 export function disposeVideoPip() {
   stops.forEach((stop) => stop());
   stops = [];
+  clearInterval(ticker);
   if (document.pictureInPictureElement === video) {
     void document.exitPictureInPicture();
   }
   video?.remove();
   video = null;
   canvas = null;
+  composed = null;
 }
