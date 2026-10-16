@@ -73,7 +73,8 @@ function mountFooter() {
     {
       global: {
         plugins: [vuetify],
-        stubs: { BottomNavigation: true, Player: true },
+        // amusic: Footer also mounts our fullscreen player
+        stubs: { BottomNavigation: true, Player: true, AmusicFullscreen: true },
       },
     },
   );

@@ -33,6 +33,8 @@
   >
     <Player :use-floating-player="store.mobileLayout" />
   </v-footer>
+  <!-- amusic: one fullscreen player for both the glass bar and the phone card -->
+  <AmusicFullscreen />
 </template>
 
 <script setup lang="ts">
@@ -47,6 +49,7 @@ import {
   watchEffect,
 } from "vue";
 import Player from "./PlayerOSD/Player.vue";
+import AmusicFullscreen from "@/amusic/components/fullscreen/AmusicFullscreen.vue";
 import AmusicGlassBar from "@/amusic/components/bar/AmusicGlassBar.vue";
 import {
   isPhoneLayout,

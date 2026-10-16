@@ -39,7 +39,7 @@ The bar SHALL show three groups:
 - **THEN** the centre display shows the player name and an idle state, and transport controls that cannot act are disabled
 
 ### Requirement: Bar degrades gracefully when narrow
-When the bar's capped width cannot fit all three groups, it SHALL drop shuffle and repeat first, then album text, and SHALL keep play/pause, title and the room control.
+When the bar's capped width cannot fit all three groups, it SHALL drop shuffle and repeat first, then album text, the quality badge and the volume button (volume stays reachable in fullscreen), and SHALL keep play/pause, title and the room control inside the bar.
 
 #### Scenario: Portrait tablet
 - **WHEN** the layout is tablet portrait at 820px wide

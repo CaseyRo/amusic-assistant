@@ -234,7 +234,7 @@ const stripStyle = computed(() =>
   align-items: center;
   gap: 10px;
   /* the title is what the bar is for; everything else gives way first */
-  min-width: 150px;
+  min-width: 120px;
   height: 44px;
   padding: 0 12px 0 4px;
   overflow: hidden;
@@ -356,14 +356,20 @@ const stripStyle = computed(() =>
   }
 }
 
+/* then album and badge; volume lives on in fullscreen and the picker */
 @container (max-width: 640px) {
+  .am-bar {
+    gap: 10px;
+  }
+
   .am-bar__album,
-  .am-bar__badge {
-    display: none;
+  .am-bar__badge,
+  .am-bar__actions :deep(.player-bar-volume-button) {
+    display: none !important;
   }
 
   .am-bar__room {
-    max-width: 112px;
+    max-width: 104px;
   }
 }
 </style>

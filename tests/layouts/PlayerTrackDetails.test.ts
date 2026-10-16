@@ -23,10 +23,6 @@ vi.mock("@/plugins/breakpoint", () => ({
 vi.mock("@/layouts/default/PlayerOSD/PlayerFullscreen.vue", () => ({
   default: { template: "<div />" },
 }));
-// amusic: PlayerTrackDetails mounts our fullscreen player instead
-vi.mock("@/amusic/components/fullscreen/AmusicFullscreen.vue", () => ({
-  default: { template: "<div />" },
-}));
 
 vi.mock("@/plugins/router", () => ({ default: { push: vi.fn() } }));
 // QualityDetailsBtn's audio-processing chain imports ProviderIcon, which

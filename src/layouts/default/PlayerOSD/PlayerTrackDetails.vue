@@ -186,8 +186,7 @@
       </div>
     </template>
   </v-list-item>
-  <!-- amusic: our fullscreen player replaces upstream's -->
-  <AmusicFullscreen />
+  <!-- amusic: upstream's fullscreen player is replaced by ours, mounted once in Footer.vue -->
 </template>
 
 <script setup lang="ts">
@@ -209,7 +208,6 @@ import { useUserPreferences } from "@/composables/userPreferences";
 import { useActiveAudioPath } from "@/composables/useActiveAudioPath";
 import { useNowPlayingSource } from "@/composables/nowPlayingSource";
 import NowPlayingSourceBadge from "./NowPlayingSourceBadge.vue";
-import AmusicFullscreen from "@/amusic/components/fullscreen/AmusicFullscreen.vue";
 
 const marqueeSync = new MarqueeTextSync();
 const { getPreference } = useUserPreferences();

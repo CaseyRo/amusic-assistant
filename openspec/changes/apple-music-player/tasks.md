@@ -41,10 +41,10 @@
 
 - [x] 6.1 Build `AmusicGlassBar` (transport · centre display with art, title, artist and album, badge and hairline progress · lyrics, queue, volume, room) and mount it from `Footer.vue` on non-phone layouts. Verify against the Paper library artboard at 1440×900
 - [x] 6.2 Make content flow beneath the bar (a transparent, click-through footer strip; drop `v-main` bottom padding on non-phone layouts, content bottom padding of bar height plus gap) and verify that the last album row scrolls fully clear and that clicks beside the bar reach the content
-- [ ] 6.3 Implement container-query degradation (drop shuffle and repeat, then album text) and verify at 820×1180 that play/pause, title and room remain
-- [ ] 6.4 Wire the centre display, lyrics and queue actions to open fullscreen with the right panel, and verify each one
-- [ ] 6.5 Give the phone floating card the glass treatment and verify at 390×844 that it still taps through to fullscreen
-- [ ] 6.6 Verify the idle state: with nothing loaded, the bar shows the player name and disables the transport controls that cannot act
+- [x] 6.3 Implement container-query degradation (drop shuffle and repeat, then album text) and verify at 820×1180 that play/pause, title and room remain
+- [x] 6.4 Wire the centre display, lyrics and queue actions to open fullscreen with the right panel, and verify each one
+- [x] 6.5 Give the phone floating card the glass treatment and verify at 390×844 that it still taps through to fullscreen
+- [x] 6.6 Verify the idle state: with nothing loaded, the bar shows the player name and disables the transport controls that cannot act
 
 ## 7. Mini player
 

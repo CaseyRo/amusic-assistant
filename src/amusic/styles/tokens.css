@@ -60,3 +60,23 @@
       var(--device-inset-bottom, 0px) + var(--am-bar-bottom-extra, 0px) + 16px
   ) !important;
 }
+
+/* spec: floating-player-bar, phone card. Upstream's floating card, made glass:
+   the artwork tint stays as a faint wash over a blurred, translucent pane. */
+.mediacontrols-player-float .mediacontrols-mobile-container {
+  background: var(--am-glass-fill-strong) !important;
+  -webkit-backdrop-filter: var(--am-glass-blur);
+  backdrop-filter: var(--am-glass-blur);
+  border: 1px solid var(--am-glass-rim);
+  box-shadow: var(--am-glass-shadow) !important;
+}
+
+.mediacontrols-player-float .mediacontrols-bg[data-floating="true"] {
+  opacity: 0.35;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .mediacontrols-player-float .mediacontrols-mobile-container {
+    background: var(--am-glass-fallback) !important;
+  }
+}
