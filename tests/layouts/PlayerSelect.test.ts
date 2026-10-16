@@ -193,6 +193,20 @@ const PlayerCardStub = {
   `,
 };
 
+// amusic: PlayerSelect lists AmusicRoomRow instead of PlayerCard; the stub
+// keeps the hooks the selection, setup and focus tests drive
+const AmusicRoomRowStub = {
+  props: ["player"],
+  emits: ["select"],
+  template: `
+    <article class="player-card" :data-player-id="player.player_id">
+      <button class="select-player" @click="$emit('select', player)">
+        {{ player.name }}
+      </button>
+    </article>
+  `,
+};
+
 const SearchInputStub = {
   props: ["modelValue"],
   emits: ["update:modelValue"],
@@ -333,6 +347,7 @@ function mountPlayerSelect() {
       },
       stubs: {
         PlayerCard: PlayerCardStub,
+        AmusicRoomRow: AmusicRoomRowStub,
         SearchInput: SearchInputStub,
         DropdownMenu: passthroughStub,
         DropdownMenuCheckboxItem: DropdownMenuCheckboxItemStub,
@@ -360,6 +375,7 @@ function mountPlayerSelectWithPopover() {
       },
       stubs: {
         PlayerCard: PlayerCardStub,
+        AmusicRoomRow: AmusicRoomRowStub,
         SearchInput: SearchInputStub,
         DropdownMenu: passthroughStub,
         DropdownMenuCheckboxItem: DropdownMenuCheckboxItemStub,
@@ -676,23 +692,24 @@ describe("PlayerSelect", () => {
     ).toEqual(["office", "kitchen"]);
   });
 
-  it("shows search only when more than ten players are visible", () => {
+  // amusic: the fork's picker searches from nine rooms (spec: output-picker)
+  it("shows search only when more than eight players are visible", () => {
     api.players = Object.fromEntries(
-      Array.from({ length: 10 }, (_, index) => {
+      Array.from({ length: 8 }, (_, index) => {
         const player = createPlayer(`player-${index}`, `Player ${index}`);
         return [player.player_id, player];
       }),
     );
 
-    const tenPlayers = mountPlayerSelect();
-    expect(tenPlayers.find(".player-search").exists()).toBe(false);
-    tenPlayers.unmount();
+    const eightPlayers = mountPlayerSelect();
+    expect(eightPlayers.find(".player-search").exists()).toBe(false);
+    eightPlayers.unmount();
 
-    const extraPlayer = createPlayer("player-10", "Player 10");
+    const extraPlayer = createPlayer("player-8", "Player 8");
     api.players[extraPlayer.player_id] = extraPlayer;
 
-    const elevenPlayers = mountPlayerSelect();
-    expect(elevenPlayers.find(".player-search").exists()).toBe(true);
+    const ninePlayers = mountPlayerSelect();
+    expect(ninePlayers.find(".player-search").exists()).toBe(true);
   });
 
   it("filters the ordered list by player name", async () => {
@@ -844,7 +861,8 @@ describe("PlayerSelect", () => {
     );
   });
 
-  it("enables the detailed card layout only in the selector", () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("enables the detailed card layout only in the selector", () => {
     const player = createPlayer("kitchen", "Kitchen");
     api.players = { [player.player_id]: player };
 
@@ -881,7 +899,8 @@ describe("PlayerSelect", () => {
     expect(scroller.findAll(".player-card")).toHaveLength(2);
   });
 
-  it("shows volume controls only for playing and paused players by default", () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("shows volume controls only for playing and paused players by default", () => {
     api.players = {
       idle: createPlayer("idle", "Idle"),
       paused: createPlayer("paused", "Paused", PlaybackState.PAUSED),
@@ -905,7 +924,8 @@ describe("PlayerSelect", () => {
     });
   });
 
-  it("can hide grouped-player sublines", () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("can hide grouped-player sublines", () => {
     setPlayerSelectPreference("playerSelect.showGroupMemberNames", false);
     const player = createPlayer("kitchen", "Kitchen");
     api.players = { [player.player_id]: player };
@@ -980,8 +1000,12 @@ describe("PlayerSelect", () => {
     const sheet = wrapper.find('[data-testid="player-select-sheet"]');
     expect(sheet.classes()).toContain("player-select-popover");
     expect(sheet.attributes("align")).toBe("end");
-    expect(wrapper.findComponent(PopoverAnchorStub).props("reference")).toBe(
-      playerBarEndAnchor,
+    // amusic: the anchor wraps upstream's and falls back to it without a fork trigger
+    const reference = wrapper
+      .findComponent(PopoverAnchorStub)
+      .props("reference") as typeof playerBarEndAnchor;
+    expect(reference.getBoundingClientRect()).toEqual(
+      playerBarEndAnchor.getBoundingClientRect(),
     );
   });
 
@@ -998,8 +1022,12 @@ describe("PlayerSelect", () => {
     const sheet = wrapper.find('[data-testid="player-select-sheet"]');
     expect(sheet.classes()).toContain("player-select-popover-fullscreen");
     expect(sheet.attributes("align")).toBe("center");
-    expect(wrapper.findComponent(PopoverAnchorStub).props("reference")).toBe(
-      fullscreenPlayerSelectAnchor,
+    // amusic: the anchor wraps upstream's and falls back to it without a fork trigger
+    const reference = wrapper
+      .findComponent(PopoverAnchorStub)
+      .props("reference") as typeof fullscreenPlayerSelectAnchor;
+    expect(reference.getBoundingClientRect()).toEqual(
+      fullscreenPlayerSelectAnchor.getBoundingClientRect(),
     );
   });
 
@@ -1137,7 +1165,8 @@ describe("PlayerSelect", () => {
     trigger.remove();
   });
 
-  it("keeps inline grouping and child-volume controls mutually exclusive", async () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("keeps inline grouping and child-volume controls mutually exclusive", async () => {
     const player = createPlayer("group", "Everywhere", PlaybackState.PLAYING);
     api.players = { [player.player_id]: player };
     const wrapper = mountPlayerSelect();
@@ -1157,7 +1186,8 @@ describe("PlayerSelect", () => {
     expect(card().attributes("data-child-volumes")).toBe("true");
   });
 
-  it("allows inline grouping controls without showing an idle volume slider", async () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("allows inline grouping controls without showing an idle volume slider", async () => {
     const player = createPlayer("group", "Everywhere");
     api.players = { [player.player_id]: player };
     const wrapper = mountPlayerSelect();
@@ -1172,7 +1202,8 @@ describe("PlayerSelect", () => {
     ).toBe("true");
   });
 
-  it("opens the grouping controls of the active player from the fullscreen player", async () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("opens the grouping controls of the active player from the fullscreen player", async () => {
     const kitchen = createPlayer("kitchen", "Kitchen", PlaybackState.PLAYING);
     kitchen.can_group_with = ["attic"];
     api.players = {
@@ -1193,7 +1224,8 @@ describe("PlayerSelect", () => {
     expect(card("attic").attributes("data-member-controls")).toBe("false");
   });
 
-  it("keeps the grouping controls closed when opened from the player bar", async () => {
+  // amusic: tests PlayerCard options the fork's room rows replace
+  it.skip("keeps the grouping controls closed when opened from the player bar", async () => {
     const kitchen = createPlayer("kitchen", "Kitchen", PlaybackState.PLAYING);
     kitchen.can_group_with = ["attic"];
     api.players = { kitchen };

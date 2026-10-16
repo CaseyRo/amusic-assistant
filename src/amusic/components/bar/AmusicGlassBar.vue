@@ -106,7 +106,7 @@
           type="button"
           class="am-bar__room"
           :aria-label="$t('tooltip.select_player')"
-          @click="store.showPlayersMenu = true"
+          @click="openPicker"
         >
           <PlayerIcon :icon="store.activePlayer?.icon" :size="14" />
           <span>{{ roomLabel }}</span>
@@ -138,7 +138,7 @@ import GlassSurface from "@/amusic/components/GlassSurface.vue";
 import { coverSeed } from "@/amusic/composables/useNowPlayingPalette";
 import { useMiniPlayerWindow } from "@/amusic/composables/useMiniPlayerWindow";
 import { useNowPlayingProgress } from "@/amusic/composables/useNowPlayingProgress";
-import { requestedFullscreenPanel } from "@/amusic/state";
+import { openPicker, requestedFullscreenPanel } from "@/amusic/state";
 
 const media = computed(() => store.activePlayer?.current_media ?? null);
 const seed = computed(() => (media.value ? coverSeed(media.value) : ""));

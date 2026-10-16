@@ -34,7 +34,7 @@
 - [x] 5.5 Implement phone landscape (artwork left, controls right, panels replace the artwork, no scroll) and verify at 844×390
 - [ ] 5.6 Restyle the lyrics presentation (current line full contrast, distance-based dim and blur, unsynced fallback) by wrapping `LyricsViewer`, and verify with a track that has LRC lyrics and with one that has plain lyrics
 - [x] 5.7 Implement the no-lyrics and no-artwork states and verify with the NAS track "Like A Rolling Stone" (no cover, no lyrics): a generated cover, Lyrics marked unavailable, and the queue shown on desktop
-- [ ] 5.8 Wire the room control to open the player picker and verify that switching rooms from fullscreen changes the active player
+- [x] 5.8 Wire the room control to open the player picker and verify that switching rooms from fullscreen changes the active player
 - [x] 5.9 Verify rotation and resizing: resize from 1440 to 700 to 390 px wide during playback and confirm the layout switches without a reload and audio does not stop
 
 ## 6. Floating glass bar
@@ -64,11 +64,11 @@
 
 ## 10. Output picker
 
-- [ ] 10.1 Build `AmusicOutputPicker` (glass sheet on phones, anchored popover on wider layouts) behind an `amusic:` switch on `store.showPlayersMenu`, and verify it opens from the bar room chip, the fullscreen room control and the phone dock
-- [ ] 10.2 Build the room rows (icon, name, now-playing art and title or "Not playing", quality badge, checkmark on the active room, playing rooms first, search above eight rooms) and verify with the live rooms (Kitchen, Bedroom, musicmachine…)
-- [ ] 10.3 Add per-room volume sliders that do not change the active room, and verify by adjusting a non-active room's volume
-- [ ] 10.4 Add grouping toggles for compatible rooms only, and verify by adding and removing a room from a group on the live server
-- [ ] 10.5 Verify that selecting a row makes it active, closes the picker, and that the bar and fullscreen follow
+- [x] 10.1 Build `AmusicOutputPicker` (glass sheet on phones, anchored popover on wider layouts) behind an `amusic:` switch on `store.showPlayersMenu`, and verify it opens from the bar room chip, the fullscreen room control and the phone dock
+- [x] 10.2 Build the room rows (icon, name, now-playing art and title or "Not playing", quality badge, checkmark on the active room, playing rooms first, search above eight rooms) and verify with the live rooms (Kitchen, Bedroom, musicmachine…)
+- [x] 10.3 Add per-room volume sliders that do not change the active room, and verify by adjusting a non-active room's volume
+- [x] 10.4 Add grouping toggles for compatible rooms only, and verify by adding and removing a room from a group on the live server
+- [x] 10.5 Verify that selecting a row makes it active, closes the picker, and that the bar and fullscreen follow
 
 ## 11. Integration
 

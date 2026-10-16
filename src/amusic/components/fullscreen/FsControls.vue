@@ -77,6 +77,7 @@ import ShuffleBtn from "@/layouts/default/PlayerOSD/PlayerControlBtn/ShuffleBtn.
 import PlayerTimeline from "@/layouts/default/PlayerOSD/PlayerTimeline.vue";
 import PlayerVolume from "@/layouts/default/PlayerOSD/PlayerVolume.vue";
 import { store } from "@/plugins/store";
+import { openPicker } from "@/amusic/state";
 import AmusicQualityBadge from "@/amusic/components/AmusicQualityBadge.vue";
 import GlassSurface from "@/amusic/components/GlassSurface.vue";
 
@@ -95,10 +96,6 @@ const props = withDefaults(defineProps<Props>(), {
 const iconSkip = computed(() => (props.size === "large" ? 34 : 28));
 const iconSide = computed(() => (props.size === "large" ? 22 : 20));
 const playSize = computed(() => (props.size === "large" ? 64 : 52));
-
-function openPicker() {
-  store.showPlayersMenu = true;
-}
 </script>
 
 <style scoped>

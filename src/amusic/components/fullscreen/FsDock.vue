@@ -17,7 +17,7 @@
       type="button"
       class="fs-dock__room"
       :aria-label="$t('tooltip.select_player')"
-      @click="store.showPlayersMenu = true"
+      @click="openPicker"
     >
       <PlayerIcon :icon="store.activePlayer?.icon" :size="16" />
       <span>{{ roomLabel }}</span>
@@ -41,6 +41,7 @@ import { computed } from "vue";
 import PlayerIcon from "@/components/PlayerIcon.vue";
 import { store } from "@/plugins/store";
 import GlassSurface from "@/amusic/components/GlassSurface.vue";
+import { openPicker } from "@/amusic/state";
 
 export type FsPanel = "none" | "lyrics" | "queue";
 

@@ -93,7 +93,10 @@ In Safari the video is prepared on mount, because `requestPictureInPicture()` mu
 For per-room badges in the picker, each room's audio path is resolved the same way. The picker gets a single `amusic:`-marked slot for this.
 
 ### 8. Output picker is a fork-owned component behind the existing open flag
-`AmusicOutputPicker` replaces how `PlayerSelect.vue` is shown when `store.showPlayersMenu` is set. One `amusic:` switch is enough, because the flag and the store actions (setting the active player, group membership, volume) stay upstream's.
+Upstream's `PlayerSelect.vue` stays: besides the panel it picks and remembers the default player and prefers the built-in one, which a replacement would have to duplicate. Its `PlayerCard` list is swapped for the fork's `AmusicRoomRow` behind one `amusic:` switch, and its popover is made glass from `tokens.css`. The flag and the store actions (setting the active player, group membership, volume) stay upstream's.
+
+- Upstream hides rooms synced into another room's group. The picker puts the active room's members back below it (`withActiveGroupMembers`), so they show as grouped and can be removed again.
+- The fork's room controls record themselves as the trigger (`openPicker`), and the popover anchors to that element, falling back to upstream's anchors.
 
 - Rows reuse upstream helpers for player ordering (`useOrderedPlayers`), selectable players and group compatibility, so behaviour matches upstream.
 - Phone layouts render it as a bottom sheet; wider layouts render a popover anchored to the element that opened it.

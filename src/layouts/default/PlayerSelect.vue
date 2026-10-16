@@ -142,39 +142,23 @@
           />
         </div>
 
-        <div class="space-y-2 px-3 pt-3">
+        <div class="space-y-0.5 px-2 pt-2">
           <p
             v-if="filteredPlayers.length === 0"
             class="text-muted-foreground px-3 py-8 text-center text-sm"
           >
             {{ playerSearchQuery ? $t("no_content_filter") : $t("no_content") }}
           </p>
-          <PlayerCard
-            v-for="player in filteredPlayers"
-            :id="player.player_id"
+          <!-- amusic: Apple-style room rows replace PlayerCard (spec: output-picker) -->
+          <AmusicRoomRow
+            v-for="player in withActiveGroupMembers(
+              filteredPlayers,
+              store.activePlayer,
+              api.players,
+            )"
             :key="player.player_id"
-            :data-player-id="player.player_id"
             :player="player"
-            :show-volume-control="showVolumeControl(player)"
-            :show-menu-button="true"
-            :show-child-volumes="expandedVolumePlayerIds.has(player.player_id)"
-            :show-member-controls="
-              expandedMemberPlayerIds.has(player.player_id)
-            "
-            :show-group-controls="true"
-            :show-disabled-group-control="true"
-            :show-group-member-names="showGroupMemberNames"
-            group-member-layout="subtitle-list"
-            :stack-media-details="true"
-            :allow-power-control="true"
-            :group-control-expanded="
-              expandedMemberPlayerIds.has(player.player_id)
-            "
-            :group-controls-id="getGroupControlsId(player.player_id)"
-            :show-selected-indicator="true"
-            @click="selectPlayer"
-            @toggle-child-volumes="toggleChildVolumes"
-            @toggle-member-controls="toggleMemberControls"
+            @select="selectPlayer"
           />
         </div>
       </div>
@@ -184,7 +168,6 @@
 
 <script setup lang="ts">
 import PanelDragHandle from "@/components/PanelDragHandle.vue";
-import PlayerCard from "@/components/PlayerCard.vue";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -223,6 +206,9 @@ import { eventbus } from "@/plugins/eventbus";
 import { store } from "@/plugins/store";
 import { webPlayer } from "@/plugins/web_player";
 import { EllipsisVertical } from "@lucide/vue";
+import AmusicRoomRow from "@/amusic/components/picker/AmusicRoomRow.vue";
+import { withActiveGroupMembers } from "@/amusic/rooms";
+import { triggerAnchor } from "@/amusic/state";
 import {
   computed,
   nextTick,
@@ -233,7 +219,8 @@ import {
   watch,
 } from "vue";
 
-const SEARCH_PLAYER_THRESHOLD = 10;
+// amusic: search from nine rooms up (spec: output-picker, "Finding rooms")
+const SEARCH_PLAYER_THRESHOLD = 8;
 // Stored instead of a built-in player id: those are unique per browser/app
 // session, so they are meaningless on the next visit or on another device.
 const BUILTIN_PLAYER_PREFERENCE = "<builtinplayer>";
@@ -290,10 +277,13 @@ const showSearch = computed(
 // player select button in there and stays on top of it
 const popoutFromFullscreen = computed(() => store.showFullscreenPlayer);
 
+// amusic: anchored to the control that opened it, where that is one of ours
 const popoutAnchor = computed(() =>
-  popoutFromFullscreen.value
-    ? fullscreenPlayerSelectAnchor
-    : playerBarEndAnchor,
+  triggerAnchor(
+    popoutFromFullscreen.value
+      ? fullscreenPlayerSelectAnchor
+      : playerBarEndAnchor,
+  ),
 );
 
 const filteredPlayers = computed(() => {

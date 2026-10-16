@@ -2,16 +2,16 @@
   <!-- spec: stream-quality-indicator. Hidden, with no space reserved, when the
        tier is unknown; opens MA's own signal-path details. -->
   <Popover
-    v-if="activeAudioPath && label"
+    v-if="chain && label"
     :open="open"
-    @update:open="(value) => (open = !readonly && value)"
+    @update:open="(value) => (open = !isReadonly && value)"
   >
     <PopoverTrigger as-child>
       <button
         type="button"
         class="am-quality"
         :data-tone="tone"
-        :data-readonly="readonly || undefined"
+        :data-readonly="isReadonly || undefined"
         :style="{ '--tier': tierColor }"
         :aria-label="
           $t('show_audio_chain_details_for_quality', { quality: label })
@@ -26,6 +26,7 @@
       </button>
     </PopoverTrigger>
     <PopoverContent
+      v-if="activeAudioPath && !player"
       side="top"
       align="center"
       :collision-padding="8"
@@ -57,6 +58,8 @@ import {
   qualityTierRangeLabel,
   useStreamQuality,
 } from "@/composables/useStreamQuality";
+import { resolvePlayerQueue } from "@/plugins/api/helpers";
+import type { Player } from "@/plugins/api/interfaces";
 import { $t } from "@/plugins/i18n";
 import { formatSummary } from "@/amusic/quality";
 
@@ -66,18 +69,31 @@ interface Props {
   showFormat?: boolean;
   /** shows the tier only; for windows the details popover cannot reach */
   readonly?: boolean;
+  /** another room than the active one; always read-only */
+  player?: Player;
 }
-withDefaults(defineProps<Props>(), {
+const props = withDefaults(defineProps<Props>(), {
   tone: "app",
   showFormat: true,
   readonly: false,
+  player: undefined,
 });
+const isReadonly = computed(() => props.readonly || !!props.player);
 
 const open = ref(false);
 const { activeAudioPath } = useActiveAudioPath();
-const { minOutputQualityTier, maxOutputQualityTier } = useStreamQuality(
-  computed(() => activeAudioPath.value?.audioProcessing),
+// the details popover knows only the active room, so other rooms get the tier alone
+const roomStreamDetails = computed(() => {
+  if (!props.player) return undefined;
+  const queue = resolvePlayerQueue(props.player);
+  return queue?.active ? queue.current_item?.streamdetails : undefined;
+});
+const chain = computed(() =>
+  props.player
+    ? roomStreamDetails.value?.audio_processing
+    : activeAudioPath.value?.audioProcessing,
 );
+const { minOutputQualityTier, maxOutputQualityTier } = useStreamQuality(chain);
 
 const label = computed(() =>
   qualityTierRangeLabel(minOutputQualityTier.value, maxOutputQualityTier.value),
@@ -94,7 +110,12 @@ const TIER_COLORS: Record<number, string> = {
 const tierColor = computed(() => TIER_COLORS[maxOutputQualityTier.value]);
 
 const summary = computed(() =>
-  formatSummary(activeAudioPath.value?.streamDetails?.audio_format),
+  formatSummary(
+    (props.player
+      ? roomStreamDetails.value
+      : activeAudioPath.value?.streamDetails
+    )?.audio_format,
+  ),
 );
 </script>
 
