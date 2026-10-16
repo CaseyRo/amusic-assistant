@@ -47,6 +47,19 @@ export const playerBarEndAnchor = {
       document.getElementById("player-bar") ??
       document.getElementById("player-select-button")
     )?.getBoundingClientRect();
+    // amusic: the floating glass bar does not reach the window edge, so its
+    // popouts line up with the bar's own right edge
+    if (
+      anchorRect &&
+      document.documentElement.hasAttribute("data-amusic-bar")
+    ) {
+      return new DOMRect(
+        anchorRect.right,
+        anchorRect.top,
+        0,
+        anchorRect.height,
+      );
+    }
     // the window reaches past the cutout, so the gap is kept from the last
     // column of pixels that is actually safe to draw in
     return new DOMRect(

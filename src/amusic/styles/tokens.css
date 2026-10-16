@@ -94,9 +94,10 @@
   pointer-events: none;
 }
 
-/* spec: output-picker. Upstream's player popout (sheet on phones, popover
-   elsewhere) made glass; the pair of classes outranks the !important utilities */
-.player-bar-popout.player-select-popover {
+/* spec: output-picker. Upstream's player-bar popouts (room picker, volume,
+   group; sheets on phones, popovers elsewhere) made glass. :root lifts the
+   rule over the !important utilities they carry */
+:root .player-bar-popout {
   background: var(--am-glass-fill-strong) !important;
   backdrop-filter: var(--am-glass-blur);
   border: 1px solid var(--am-glass-rim) !important;
@@ -108,13 +109,16 @@
 }
 
 @supports not (backdrop-filter: blur(1px)) {
-  .player-bar-popout.player-select-popover {
+  :root .player-bar-popout {
     background: var(--am-glass-fallback) !important;
   }
 }
 
-/* upstream's picker backdrop stops at the old full-width bar; the glass bar
-   floats (z-index 1000, above the backdrop), so the blur reaches the bottom */
-:root[data-amusic-bar] .player-select-backdrop.player-select-desktop-offset {
+/* upstream's popout backdrops stop at the old full-width bar; the glass bar
+   floats (z-index 1000, above them), so the blur reaches the bottom and the
+   bar keeps blurring the page instead of a bare strip */
+:root[data-amusic-bar] .player-select-backdrop.player-select-desktop-offset,
+:root[data-amusic-bar] .player-volume-backdrop.player-volume-backdrop-desktop,
+:root[data-amusic-bar] .modal-backdrop.player-group-backdrop-desktop {
   bottom: 0 !important;
 }
