@@ -16,8 +16,10 @@ export default defineConfig({
       template: { transformAssetUrls },
     }),
     tailwindcss(),
+    // amusic: Inter backs up the system font stack; downloaded at build time
+    // and served from our own origin
     webfontDownload([
-      "https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap",
+      "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap",
     ]),
     vuetify({
       autoImport: true,

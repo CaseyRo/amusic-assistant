@@ -84,3 +84,47 @@ export function legibleAccent(
   }
   return color.hex();
 }
+
+/** The accent when nothing is playing: the Tidal coral from the Paper designs. */
+export const FALLBACK_ACCENT = "#FF7A59";
+
+/** HSV saturation (0-100) below which a cover counts as grey. */
+const MIN_ACCENT_SATURATION = 25;
+
+/** The surfaces the accent must hold AA against, per theme. */
+export const ACCENT_SURFACE = { light: "#ffffff", dark: "#141416" } as const;
+
+export interface AppAccent {
+  /** the accent, adjusted to AA against the theme's surface */
+  accent: string;
+  /** black or white, whichever reads better on an accent fill */
+  onAccent: string;
+}
+
+/**
+ * The app accent for the current artwork (spec: app-theme). Takes the more
+ * colourful of the palette's two fields, keeps the coral when both are near
+ * grey, then clamps it to AA for the theme.
+ */
+export function appAccent(palette: AmPalette | null, dark: boolean): AppAccent {
+  const vivid = palette
+    ? [palette.primary, palette.accent].sort(
+        (a, b) => Color(b).saturationv() - Color(a).saturationv(),
+      )[0]
+    : null;
+  // a near-grey cover would make the whole app grey; keep the coral then
+  const base =
+    vivid && Color(vivid).saturationv() >= MIN_ACCENT_SATURATION
+      ? vivid
+      : FALLBACK_ACCENT;
+  const accent = legibleAccent(
+    base,
+    dark ? ACCENT_SURFACE.dark : ACCENT_SURFACE.light,
+  );
+  const white = Color("#fff");
+  const onAccent =
+    Color(accent).contrast(white) >= Color(accent).contrast(Color("#000"))
+      ? "#FFFFFF"
+      : "#000000";
+  return { accent, onAccent };
+}

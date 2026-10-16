@@ -1,3 +1,5 @@
+@import "./theme.css";
+
 /* amusic design tokens. Loaded once from main.ts, after upstream's styles. */
 :root {
   /* glass surfaces (spec: now-playing-fullscreen, floating-player-bar) */

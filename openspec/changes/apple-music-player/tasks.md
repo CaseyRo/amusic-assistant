@@ -57,10 +57,10 @@
 
 ## 9. App theme
 
-- [ ] 9.1 Switch the app font to the system stack with self-hosted Inter (`vite.config.ts` webfont URL, `settings.scss`, global CSS). Verify that the built bundle has no `fonts.googleapis.com` requests and that the computed font on macOS is the system font
-- [ ] 9.2 Override the neutral surface tokens for light and dark in `src/amusic/styles/theme.css` and verify the library, sidebar and a settings page in both themes
-- [ ] 9.3 Implement `useArtworkAccent()` (palette → AA-clamped accent → Vuetify and Tailwind primary, fallback coral, smooth or reduced-motion transition) and verify with a Vitest test that pale and dark inputs are clamped to AA and that an empty palette returns the fallback
-- [ ] 9.4 Verify in the running app that the active nav item, primary buttons and progress follow the playing track's artwork, and that they return to coral when playback stops
+- [x] 9.1 Switch the app font to the system stack with self-hosted Inter (`vite.config.ts` webfont URL, `settings.scss`, global CSS). Verify that the built bundle has no `fonts.googleapis.com` requests and that the computed font on macOS is the system font
+- [x] 9.2 Override the neutral surface tokens for light and dark in `src/amusic/styles/theme.css` and verify the library, sidebar and a settings page in both themes
+- [x] 9.3 Implement `useArtworkAccent()` (palette → AA-clamped accent → Vuetify and Tailwind primary, fallback coral, smooth or reduced-motion transition) and verify with a Vitest test that pale and dark inputs are clamped to AA and that an empty palette returns the fallback
+- [x] 9.4 Verify in the running app that the active nav item, primary buttons and progress follow the playing track's artwork, and that they return to coral when playback stops
 
 ## 10. Output picker
 

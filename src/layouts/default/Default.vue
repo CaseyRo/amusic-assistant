@@ -17,6 +17,7 @@
 <script lang="ts" setup>
 import MainView from "./View.vue";
 import AmusicMiniPlayer from "@/amusic/components/mini/AmusicMiniPlayer.vue";
+import { useArtworkAccent } from "@/amusic/composables/useArtworkAccent";
 import Footer from "./Footer.vue";
 import ReloadPrompt from "./ReloadPrompt.vue";
 import SetupPausedBanner from "@/components/onboarding/SetupPausedBanner.vue";
@@ -30,6 +31,8 @@ import { useRoute } from "vue-router";
 const route = useRoute();
 
 usePlayPauseShortcut();
+// amusic: the app accent follows the playing artwork
+useArtworkAccent();
 
 watch(
   // make sure it's retriggered when players array is populated

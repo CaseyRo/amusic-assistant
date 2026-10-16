@@ -1,6 +1,9 @@
 import Color from "color";
 import { describe, expect, it } from "vitest";
 import {
+  ACCENT_SURFACE,
+  appAccent,
+  FALLBACK_ACCENT,
   fromServerPalette,
   generatedPalette,
   legibleAccent,
@@ -87,5 +90,45 @@ describe("legibleAccent", () => {
 
   it("leaves an accent that already reads untouched", () => {
     expect(legibleAccent("#B01E3C", "#FFFFFF")).toBe("#B01E3C");
+  });
+});
+
+describe("appAccent", () => {
+  const AA = 4.5;
+
+  it("darkens pale artwork until accent text on white meets AA", () => {
+    const pale = { primary: "#FFF6B0", accent: "#FFF1A0", deep: "#3A3510" };
+    const { accent } = appAccent(pale, false);
+    expect(Color(accent).contrast(Color("#ffffff"))).toBeGreaterThanOrEqual(AA);
+  });
+
+  it("lightens dark artwork until it meets AA on the dark surface", () => {
+    const dark = { primary: "#3A0A12", accent: "#2A0610", deep: "#100204" };
+    const { accent } = appAccent(dark, true);
+    expect(
+      Color(accent).contrast(Color(ACCENT_SURFACE.dark)),
+    ).toBeGreaterThanOrEqual(AA);
+  });
+
+  it("picks the more colourful field over a grey one", () => {
+    const grey = { primary: "#808080", accent: "#D1304F", deep: "#111111" };
+    const { accent } = appAccent(grey, false);
+    expect(Color(accent).saturationv()).toBeGreaterThan(30);
+  });
+
+  it("keeps the coral for a grey cover", () => {
+    const grey = { primary: "#2D353B", accent: "#8A9096", deep: "#111111" };
+    expect(appAccent(grey, false)).toEqual(appAccent(null, false));
+  });
+
+  it("falls back to the coral when nothing is playing", () => {
+    const { accent } = appAccent(null, false);
+    expect(accent).toBe(legibleAccent(FALLBACK_ACCENT, ACCENT_SURFACE.light));
+    expect(Color(accent).hue()).toBeCloseTo(Color(FALLBACK_ACCENT).hue(), -1);
+  });
+
+  it("puts readable text on the accent fill", () => {
+    const { accent, onAccent } = appAccent(null, false);
+    expect(Color(accent).contrast(Color(onAccent))).toBeGreaterThanOrEqual(AA);
   });
 });

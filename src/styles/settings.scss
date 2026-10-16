@@ -6,6 +6,16 @@
 
 // https://next.vuetifyjs.com/features/sass-variables/`
 @use "vuetify/settings" with (
+  // amusic: the platform's own typeface, bundled Inter where there is none
+  $body-font-family: (
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI Variable",
+    "Segoe UI",
+    "Inter",
+    system-ui,
+    sans-serif
+  ),
   // vue listitem title overrides
   $list-item-title-font-size: 0.875rem,
   $list-item-title-line-height: 1.25rem,

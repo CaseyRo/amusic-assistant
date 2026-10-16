@@ -24,6 +24,10 @@ The app's accent colour SHALL be derived from the current track's artwork palett
 - **WHEN** the active player has nothing loaded
 - **THEN** the accent is the fixed fallback colour
 
+#### Scenario: Grey artwork
+- **WHEN** the artwork's palette is near grey (both fields below 25% saturation)
+- **THEN** the accent is the fixed fallback colour, so the app does not turn grey
+
 ### Requirement: Accent stays legible
 The derived accent SHALL be adjusted in lightness so that accent-coloured text, and text on accent fills, meet WCAG AA contrast against the current theme's surfaces.
 

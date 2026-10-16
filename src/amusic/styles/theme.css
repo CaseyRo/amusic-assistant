@@ -1,0 +1,88 @@
+/* spec: app-theme. Neutral surfaces and one accent that follows the artwork.
+   --am-accent* are written by useArtworkAccent(); the fallbacks here are the
+   coral, already clamped to AA on white, for the moment before it runs. */
+:root {
+  --am-font:
+    -apple-system, BlinkMacSystemFont, "Segoe UI Variable", "Segoe UI", "Inter",
+    system-ui, sans-serif;
+  --font-sans: var(--am-font);
+}
+
+body {
+  font-family: var(--am-font);
+}
+
+/* light: white content, a light grey sidebar (Paper: themed library) */
+:root,
+:root.dark {
+  --primary: var(--am-accent, #d1532f);
+  --primary-foreground: var(--am-on-accent, #fff);
+  --ring: var(--am-accent, #d1532f);
+  --chart-1: var(--am-accent, #d1532f);
+  --sidebar-primary: var(--am-accent, #d1532f);
+  --sidebar-primary-foreground: var(--am-on-accent, #fff);
+  --sidebar-ring: var(--am-accent, #d1532f);
+  /* the active item: accent text on a faint accent wash */
+  --sidebar-accent: color-mix(
+    in srgb,
+    var(--am-accent, #d1532f) 10%,
+    transparent
+  );
+  --sidebar-accent-foreground: var(--am-accent, #d1532f);
+}
+
+:root {
+  --background: #ffffff;
+  --card: #ffffff;
+  --popover: #ffffff;
+  --sidebar: #f6f6f7;
+  --sidebar-border: #ececee;
+}
+
+:root.dark {
+  --background: #141416;
+  --card: #1c1c1e;
+  --popover: #1c1c1e;
+  --sidebar: #1c1c1e;
+  --sidebar-border: rgb(255 255 255 / 0.08);
+}
+
+/* Vuetify keeps its theme on .v-theme--*; one more selector outranks it */
+:root .v-theme--light,
+:root .v-theme--dark {
+  --v-theme-primary: var(--am-accent-rgb, 209, 83, 47);
+  --v-theme-on-primary: var(--am-on-accent-rgb, 255, 255, 255);
+}
+
+:root .v-theme--light {
+  --v-theme-background: 255, 255, 255;
+}
+
+:root .v-theme--dark {
+  --v-theme-background: 20, 20, 22;
+  --v-theme-panel: 28, 28, 30;
+}
+
+/* the wordmark takes the accent; the logo is an <img>, so it is recoloured
+   through its own shape as a mask */
+.sidebar-header-title {
+  color: var(--am-accent, #d1532f);
+}
+
+.sidebar-header-logo {
+  object-position: -9999px 0;
+  background: var(--am-accent, #d1532f);
+  mask: url("@/amusic/assets/logo-mask.svg") center / contain no-repeat;
+}
+
+/* upstream paints its light content panel #f5f5f5 directly; the page stays white */
+:root .container-panel.container-panel--light {
+  background: var(--background);
+}
+
+/* NavMain resets visited links to inherit, which paints the active item in
+   the sidebar's text colour once its route has been visited (getComputedStyle
+   hides :visited, so it only shows on screen) */
+[data-sidebar="menu-button"][data-active="true"]:visited {
+  color: var(--sidebar-accent-foreground) !important;
+}
