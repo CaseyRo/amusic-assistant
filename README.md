@@ -1,67 +1,143 @@
 # amusic-assistant
 
-An Apple Music–style skin for the [Music Assistant](https://music-assistant.io) web frontend.
+**An Apple Music–style player for [Music Assistant](https://music-assistant.io).**
 
-Music Assistant has become great at *what* it plays. This fork is about *how it feels* while it plays:
+Music Assistant has become great at *what* it plays. This fork is about *how it feels* while it plays: artwork-tinted fullscreen with synced lyrics, a floating glass player bar, an always-on-top mini player and an AirPlay-style room picker. It runs against your existing Music Assistant server.
 
-- **Fullscreen now playing:** blurred-artwork backdrop, big artwork, synced lyrics beside it. Designed separately for phone, tablet and desktop instead of one layout stretched across all three.
-- **Glass player bar:** a floating, translucent pane over the content instead of the full-width bottom strip.
-- **Always-on-top mini player:** a small window that stays in front of everything else. Document Picture-in-Picture in Chromium browsers, video Picture-in-Picture in Safari, a popup elsewhere.
-- **Output picker:** AirPlay-style room list with what each room is playing, its quality, its volume and one-tap grouping.
-- **Theme:** the accent colour follows the playing artwork, on neutral surfaces, in the platform's own typeface.
+![Fullscreen now playing with synced lyrics scrolling, on a backdrop tinted by the album artwork](docs/screenshots/fullscreen-lyrics.gif)
 
-> **Status:** early work in progress. Expect rough edges.
+> **Status:** early, but used daily. Expect rough edges, and please report them.
 
-## Screenshots
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/caseyberlin)
 
-Recorded against a live Music Assistant 2.11 server.
+---
 
-| Desktop: library and glass bar | Desktop: fullscreen with lyrics |
+## What's different
+
+### Fullscreen now playing
+
+A backdrop tinted by the artwork, big cover art, and lyrics or the queue beside it. The current lyric line is full contrast; the others fade and blur with distance, as in Apple Music. Tracks without artwork get a generated cover instead of a grey placeholder, and tracks without lyrics say so instead of showing an empty panel.
+
+It is designed per screen shape rather than stretched from one layout:
+
+| Layout | Decided by | What you get |
+| --- | --- | --- |
+| Desktop | wider than 1366px | Artwork and controls left, lyrics or queue right, bounded on ultra-wide screens |
+| Tablet landscape | up to 1366px wide | The same two columns, sized so every control stays on screen |
+| Tablet portrait | under 1000px wide | Artwork shrinks to a header when lyrics or the queue open; controls capped at 520px |
+| Phone portrait | under 600px wide | One column with a glass dock for lyrics, room and queue |
+| Phone landscape | under 500px tall | Artwork beside the controls, nothing scrolls |
+
+The layout follows the screen's shape, not whether it has touch: on touch screens every control gets a 44px target either way. Resizing a window switches layout mid-song without interrupting playback.
+
+| Desktop | Tablet landscape |
 | --- | --- |
-| ![Library with the floating glass bar and an accent taken from the playing artwork](docs/screenshots/desktop-library.jpg) | ![Fullscreen now playing with synced lyrics](docs/screenshots/desktop-fullscreen-lyrics.jpg) |
-| **Desktop: output picker** | **Tablet landscape** |
-| ![Output picker popover above the room button](docs/screenshots/desktop-output-picker.jpg) | ![Two-column fullscreen on a landscape tablet](docs/screenshots/tablet-landscape.jpg) |
+| ![Desktop fullscreen with synced lyrics](docs/screenshots/desktop-fullscreen-lyrics.jpg) | ![Two-column fullscreen on a landscape tablet](docs/screenshots/tablet-landscape.jpg) |
 
-| Tablet portrait | Phone | Phone: output picker | Phone: library |
-| --- | --- | --- | --- |
-| ![Tablet portrait with lyrics and collapsed artwork](docs/screenshots/tablet-portrait.jpg) | ![Phone now playing](docs/screenshots/phone-now-playing.jpg) | ![Glass room sheet on a phone](docs/screenshots/phone-output-picker.jpg) | ![Phone library with the glass player card](docs/screenshots/phone-library.jpg) |
+| Tablet portrait | Phone | Phone landscape |
+| --- | --- | --- |
+| ![Tablet portrait with lyrics and collapsed artwork](docs/screenshots/tablet-portrait.jpg) | ![Phone now playing](docs/screenshots/phone-now-playing.jpg) | ![Phone landscape, everything on one screen](docs/screenshots/phone-landscape.jpg) |
 
-| Phone landscape | Mini player |
+### Floating glass bar
+
+On tablets and desktops the full-width bottom strip becomes a translucent pane floating over the content: transport on the left, a centre display with artwork, title, artist, album and a hairline of progress, and lyrics, queue, mini player, volume and room on the right. Volume grows in place into a slider, as in Apple Music. When the bar gets narrow it drops controls in order (shuffle and repeat first) and keeps play, title and room. On phones the floating player card gets the same glass.
+
+### Accent from the artwork
+
+The app's accent (logo, active navigation, buttons, progress) takes its colour from the playing track's artwork and eases to the next one when the track changes. It is adjusted until it meets WCAG AA contrast, and falls back to a warm coral when nothing is playing or the cover is mostly grey. Surfaces stay neutral white and grey (near-black in dark mode), and the app uses your platform's own typeface, with Inter bundled where there is none.
+
+| Desktop library and glass bar | Phone library |
 | --- | --- |
-| ![Phone landscape, everything on one screen](docs/screenshots/phone-landscape.jpg) | ![Always-on-top mini player window](docs/screenshots/mini-player.jpg) |
+| ![Library with the glass bar and an accent taken from the playing artwork](docs/screenshots/desktop-library.jpg) | ![Phone library with the glass player card](docs/screenshots/phone-library.jpg) |
 
-## Requirements
+### Output picker
 
-- A Music Assistant **server 2.11 or newer**. This fork tracks upstream `main`, which needs server API schema 86+.
-- Node 24 and pnpm (via corepack).
+Choosing where music plays works like AirPlay: every room as a row with what it is playing, its stream-quality badge and its own volume slider. A checkmark marks the active room; a round toggle adds a compatible room to its group, or removes it again. A glass sheet on phones, a popover anchored to the room button elsewhere, with search from nine rooms.
 
-## Run it
+| Desktop | Phone |
+| --- | --- |
+| ![Output picker popover above the room button](docs/screenshots/desktop-output-picker.jpg) | ![Glass room sheet on a phone](docs/screenshots/phone-output-picker.jpg) |
+
+### Always-on-top mini player
+
+A small window with the artwork, title, room, quality badge and controls that stays in front of your other apps. Each browser gets the best mechanism it has:
+
+| Browser | Mini player |
+| --- | --- |
+| Chrome, Edge, Arc, Opera | A real always-on-top window (Document Picture-in-Picture) with working controls |
+| Safari | A picture-in-picture window of the artwork and title; play and pause from the window, skip with the system media controls |
+| Firefox, or any browser on plain `http://` | A small popup window, which cannot stay on top; a one-time hint says why |
+
+Picture-in-picture needs a secure origin: `localhost` or HTTPS. Over plain HTTP, Chromium withholds it and you get the popup.
+
+![Always-on-top mini player window](docs/screenshots/mini-player.jpg)
+
+### Stream quality, everywhere
+
+Music Assistant's quality tiers (LQ, SQ, HQ, Hi-Res) appear under the scrubber with the format (for example "SQ AAC 259"), in the bar, in the mini player and per room in the picker. Tapping the badge opens Music Assistant's own signal-path details.
+
+---
+
+## Getting started
+
+### Requirements
+
+- A Music Assistant **server 2.11 or newer** (API schema 86+). This fork tracks upstream `main`.
+- Node 24 and pnpm (via corepack) to build it.
+
+### Run it locally
 
 ```sh
 pnpm install
 pnpm dev
 ```
 
-Open http://localhost:3000 and enter your Music Assistant server URL when asked.
+Open http://localhost:3000 and enter your Music Assistant server address when asked.
 
-## Relationship to upstream
-
-This is a fork of [music-assistant/frontend](https://github.com/music-assistant/frontend) (Apache 2.0). `main` stays mergeable with upstream:
+### Host it
 
 ```sh
-git remote add upstream https://github.com/music-assistant/frontend.git
-git fetch upstream && git merge upstream/main
+pnpm build
 ```
 
-Changes are planned as OpenSpec changes in [`openspec/`](openspec/). Code that is specific to this fork is marked with `amusic:` comments so it is easy to find during upstream merges.
+This writes a static site to `music_assistant_frontend/`. Serve it from any static host. It asks for your server address on first load, so one build works for any server. Your server keeps serving the stock frontend at its own address; this one lives alongside it.
 
-All credit for Music Assistant goes to its authors and contributors. This fork only reworks the player experience. It is not affiliated with Apple or the Open Home Foundation.
+Browsers block an HTTPS page from talking to a plain `http://` server. Host it on HTTPS if your server is on HTTPS (for example behind `tailscale serve`), or on plain HTTP next to an HTTP server (picture-in-picture is then replaced by the popup).
 
-## Support this project
+---
 
-If this is useful to you, consider buying me a coffee:
+## How the fork stays mergeable
 
-[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-support-yellow?style=flat&logo=buy-me-a-coffee)](https://buymeacoffee.com/caseyberlin)
+This is a fork of [music-assistant/frontend](https://github.com/music-assistant/frontend). Music Assistant has no theme or plugin hook, so the player changes have to live in the code, but they are kept apart from it:
+
+- Everything fork-specific lives in [`src/amusic/`](src/amusic/): components, composables, styles and their tests.
+- Upstream files only get small mount points, each marked with an `amusic:` comment. List them with:
+
+  ```sh
+  git grep -n "amusic:" -- src ':!src/amusic'
+  ```
+
+- Upstream changes merge in the usual way:
+
+  ```sh
+  git remote add upstream https://github.com/music-assistant/frontend.git
+  git fetch upstream && git merge upstream/main
+  ```
+
+- [`src/amusic/README.md`](src/amusic/README.md) lists the upstream components the fork re-uses, which are the ones to check when a merge breaks the type check.
+- The work is planned as [OpenSpec](openspec/) changes, with requirements and scenarios for every surface above.
+
+## Known gaps
+
+- The mini player is verified in Chrome. Safari's and Firefox's versions are built but not yet tested in those browsers.
+- Lyrics come from your server's lyrics provider; when it is rate limited, the panel falls back to the queue after 12 seconds.
+- Tracks with plain (unsynced) lyrics have not been checked against the new lyrics styling yet.
+
+## Credits
+
+All credit for Music Assistant goes to its authors and contributors; this fork only reworks the player experience. Licensed under Apache 2.0, like upstream. Not affiliated with Apple or the Open Home Foundation.
+
+If this is useful to you, [buy me a coffee](https://buymeacoffee.com/caseyberlin).
 
 ---
 
