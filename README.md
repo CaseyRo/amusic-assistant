@@ -102,6 +102,8 @@ pnpm build
 
 This writes a static site to `music_assistant_frontend/`. Serve it from any static host. It asks for your server address on first load, so one build works for any server. Your server keeps serving the stock frontend at its own address; this one lives alongside it.
 
+Or replace the frontend your server serves, so the usual server address opens amusic: mount the build over the server's bundled frontend with a read-only volume (`<build>:/app/venv/lib/python3.14/site-packages/music_assistant_frontend:ro` in the server container, Python version as in your image). [`scripts/deploy-amusic.sh`](scripts/deploy-amusic.sh) builds, checks that path and copies the build over SSH; remove the volume to get the stock UI back.
+
 Browsers block an HTTPS page from talking to a plain `http://` server. Host it on HTTPS if your server is on HTTPS (for example behind `tailscale serve`), or on plain HTTP next to an HTTP server (picture-in-picture is then replaced by the popup).
 
 ---
